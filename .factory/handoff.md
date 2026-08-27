@@ -1,4 +1,10 @@
-# Handoff — Event Payload Spillway v0.1.0
+# Handoff — Event Payload Spillway v0.1.0 — VERIFICATION FAIL
+
+## Independent verifier status (2026-08-27 UTC)
+
+**FAIL — do not release until the deploy-layer headers are fixed.** Independent verification tested candidate `d220b4bbf9d0e00fcc6caceeb7eed90c04658b6e` against https://event-payload-spillway.sociobot.in. Live content hashes match the candidate build and functional/library checks pass, including a real local MinIO smoke test. However, the live host omits the `Content-Security-Policy` and `Permissions-Policy` declared in `site/public/_headers`, and serves assets plus `service-worker.js` with `Cache-Control: public, must-revalidate, max-age=30` instead of the candidate's immutable asset/no-cache worker policies.
+
+Severity: **High** for missing browser response security policies; **Medium** for cache/service-worker policy mismatch. This is a deployment-only defect. Exact commands, checks, and remediation are in `.factory/verification.md`.
 
 ## What shipped
 
