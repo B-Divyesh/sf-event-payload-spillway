@@ -131,7 +131,7 @@ For the demo locally, run `npm run dev` and open `http://localhost:4173`.
 
 ## Deploy
 
-Deploy `dist/site/` as a static directory. The npm package is prepared with `npm pack`; publishing credentials and deployment are owned by the factory, so this repository does not publish automatically.
+Deploy `dist/site/` as Standard Azure Static Web Apps static content. The emitted `staticwebapp.config.json` applies the browser response policy: a self-only CSP, frame and permissions restrictions, immutable caching for Vite's hashed `/assets/*` files, and `no-cache` for `/service-worker.js`. Do not replace it with a Netlify-style `_headers` file; Static Web Apps does not apply that format. The npm package is prepared with `npm pack`; publishing credentials and deployment are owned by the factory, so this repository does not publish automatically.
 
 ## Scope
 
