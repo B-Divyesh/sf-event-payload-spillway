@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Spillway arrow mark">
+  <rect width="64" height="64" fill="#f3ebd8"/>
+  <path d="M10 15h27v11H25v9h12v11H25v8H10z" fill="#17201d"/>
+  <path d="M38 30h16v16H43v8L29 40l14-14v8h-5z" fill="#095c5b" stroke="#17201d" stroke-width="3"/>
+</svg>

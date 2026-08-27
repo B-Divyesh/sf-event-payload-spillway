@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3ebd8">
+    <meta name="description" content="Encrypt oversized webhook fields to S3-compatible storage before they fill your primary database.">
+    <title>Event Payload Spillway — stop oversized events at the edge</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <script type="module" src="/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="offline" id="offline" role="status" hidden><strong>Offline:</strong> the local demo still works. Documentation is cached on this device.</div>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Event Payload Spillway home"><span aria-hidden="true">↘</span> Spillway</a>
+      <nav aria-label="Primary navigation">
+        <a href="#test-bench">Test bench</a>
+        <a href="#install">Install</a>
+        <a href="#operations">Operations</a>
+        <a href="https://github.com/B-Divyesh/sf-event-payload-spillway">GitHub</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Overflow control for JSON events</p>
+          <h1 id="hero-title">Keep one oversized event from becoming a database incident.</h1>
+          <p class="lede">Spill explicitly allowed fields into encrypted S3-compatible storage. Leave a signed, readable stub your operators can restore in two clicks.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#test-bench">Test a payload <span aria-hidden="true">↓</span></a>
+            <button class="button secondary copy-install" type="button" data-copy="npm install event-payload-spillway">Copy npm install</button>
+          </div>
+          <ul class="proof-list" aria-label="Product properties">
+            <li>Zero runtime dependencies</li>
+            <li>AES-256-GCM</li>
+            <li>MinIO + S3</li>
+          </ul>
+        </div>
+        <figure class="hero-figure">
+          <picture>
+            <source media="(max-width: 720px)" srcset="/hero-spillway-720.webp">
+            <img src="/hero-spillway.webp" width="1200" height="800" fetchpriority="high" alt="Technical cutaway showing a large coral JSON block diverted from a conveyor into a locked teal storage reservoir.">
+          </picture>
+          <figcaption><span>Plate 01</span> Oversized fields leave the hot path; the event keeps its shape.</figcaption>
+        </figure>
+      </section>
+
+      <section class="bench section" id="test-bench" aria-labelledby="bench-title">
+        <div class="section-heading">
+          <p class="eyebrow">Local test bench / no uploads</p>
+          <h2 id="bench-title">Run a spill decision in your browser.</h2>
+          <p>Keys and encrypted objects live only in memory and disappear on refresh.</p>
+        </div>
+
+        <div class="bench-grid">
+          <form id="spill-form" class="instrument" novalidate>
+            <div class="instrument-head"><span>Input event</span><span id="input-size">—</span></div>
+            <label for="payload">JSON payload</label>
+            <textarea id="payload" name="payload" rows="13" spellcheck="false" aria-describedby="payload-help payload-error"></textarea>
+            <p class="field-note" id="payload-help">Try changing the attachment, pointer, or byte limit.</p>
+            <p class="field-error" id="payload-error" role="alert"></p>
+            <div class="control-row">
+              <div>
+                <label for="pointer">Allowed JSON pointer</label>
+                <input id="pointer" name="pointer" value="/result/attachment" autocomplete="off">
+              </div>
+              <div>
+                <label for="threshold">Spill above</label>
+                <div class="input-unit"><input id="threshold" name="threshold" type="number" min="128" max="1000000" step="128" value="2048"><span>bytes</span></div>
+              </div>
+            </div>
+            <button class="button primary full" id="spill-button" type="submit">Test this payload <span aria-hidden="true">→</span></button>
+          </form>
+
+          <section class="instrument result" aria-labelledby="result-title">
+            <div class="instrument-head"><span id="result-title">Spill ledger</span><span id="decision-label">Waiting</span></div>
+            <div id="empty-result" class="empty-state">
+              <div class="empty-gauge" aria-hidden="true"><span></span></div>
+              <h3>No decision yet</h3>
+              <p>Run the sample event. The allowed oversized field will become a signed stub.</p>
+            </div>
+            <div id="result-content" hidden>
+              <div class="measurements" aria-label="Storage measurements">
+                <div><span>Incoming</span><strong id="raw-bytes">0 B</strong></div>
+                <div><span>Database</span><strong id="inline-bytes">0 B</strong></div>
+                <div><span>Avoided</span><strong id="avoided-percent">0%</strong></div>
+              </div>
+              <div class="bar-track" aria-hidden="true"><span id="bar-inline"></span></div>
+              <div class="result-message" id="result-message" role="status" aria-live="polite"></div>
+              <div class="stub-heading"><h3>Database stub</h3><span>signed / readable</span></div>
+              <pre id="stub-output" tabindex="0"><code></code></pre>
+              <div class="result-actions">
+                <button class="button primary" id="restore-button" type="button">Restore original</button>
+                <button class="button text-button" id="reset-button" type="button">Reset ledger</button>
+              </div>
+              <p id="restore-status" class="restore-status" role="status" aria-live="polite"></p>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="flow section" aria-labelledby="flow-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">One narrow job</p>
+          <h2 id="flow-title">The event stays useful. The weight moves elsewhere.</h2>
+        </div>
+        <ol class="flow-list">
+          <li><span class="step">01</span><h3>Measure allowed fields</h3><p>Exact JSON pointers are checked. Unlisted fields—even large ones—never leave the event.</p></li>
+          <li><span class="step">02</span><h3>Encrypt, then store</h3><p>AES-GCM protects the value before an S3 or MinIO write. A failed write rolls the event back.</p></li>
+          <li><span class="step">03</span><h3>Leave an audit trail</h3><p>The signed stub records size, digest, field, safe preview, expiry, and retrieval URL.</p></li>
+        </ol>
+      </section>
+
+      <section class="code-section section" id="install" aria-labelledby="install-title">
+        <div class="code-copy">
+          <p class="eyebrow">API / v0.1.0</p>
+          <h2 id="install-title">Four decisions, one small surface.</h2>
+          <p>Choose the fields, inline limit, object store, and retention window. Spillway handles encryption, signatures, atomic writes, and safe previews.</p>
+          <ul class="check-list">
+            <li>Typed ESM + CommonJS</li>
+            <li>No telemetry or runtime dependencies</li>
+            <li>Standards-based Request, fetch, and Web Crypto</li>
+          </ul>
+        </div>
+        <div class="code-panel">
+          <div class="code-tabs" role="tablist" aria-label="Code samples">
+            <button role="tab" aria-selected="true" aria-controls="code-install" id="tab-install" type="button">Install</button>
+            <button role="tab" aria-selected="false" aria-controls="code-config" id="tab-config" type="button" tabindex="-1">Configure</button>
+            <button role="tab" aria-selected="false" aria-controls="code-proxy" id="tab-proxy" type="button" tabindex="-1">Proxy</button>
+          </div>
+          <div class="code-block" id="code-install" role="tabpanel" aria-labelledby="tab-install"><button class="copy-code" type="button" data-copy="npm install event-payload-spillway">Copy</button><pre><code>npm install event-payload-spillway</code></pre></div>
+          <div class="code-block" id="code-config" role="tabpanel" aria-labelledby="tab-config" hidden><button class="copy-code" type="button" data-copy-target="config-code">Copy</button><pre><code id="config-code">const spillway = new Spillway({
+  allowlist: ["/result/attachment"],
+  maxInlineBytes: 32_000,
+  store: new S3CompatibleStore(s3),
+  encryptionKey,
+  signingKey,
+  expiresInMs: 604_800_000,
+});</code></pre></div>
+          <div class="code-block" id="code-proxy" role="tabpanel" aria-labelledby="tab-proxy" hidden><button class="copy-code" type="button" data-copy-target="proxy-code">Copy</button><pre><code id="proxy-code">const handle = createSpillwayProxy({
+  spillway,
+  upstream: "http://automation:3000/events",
+  verifyWebhook: ({ rawBody, headers }) =&gt;
+    verify(rawBody, headers),
+});</code></pre></div>
+        </div>
+      </section>
+
+      <section class="operations section" id="operations" aria-labelledby="operations-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">Operational contract</p>
+          <h2 id="operations-title">Expiry is visible. Deletion is deliberate.</h2>
+        </div>
+        <div class="ops-grid">
+          <article><span aria-hidden="true">⌁</span><h3>Report first</h3><p>Count encrypted and expired bytes before changing anything. Reports inspect the configured storage prefix.</p><code>retentionReport()</code></article>
+          <article><span aria-hidden="true">◇</span><h3>Dry-run reclaim</h3><p>Reclaim defaults to expired-only. Preview candidate count and size before deleting objects.</p><code>reclaim({ dryRun: true })</code></article>
+          <article><span aria-hidden="true">▣</span><h3>Respect holds</h3><p>Objects marked with a legal hold are excluded. Bucket lifecycle policy remains your final backstop.</p><code>spill(data, { legalHold: true })</code></article>
+        </div>
+        <aside class="warning-note"><strong>Signature order matters.</strong> Verify the provider signature against untouched request bytes before Spillway parses or transforms the event. The proxy API makes that callback mandatory.</aside>
+      </section>
+
+      <section class="final-cta section" aria-labelledby="cta-title">
+        <p class="eyebrow">Protect the hot path</p>
+        <h2 id="cta-title">Give oversized events somewhere safe to go.</h2>
+        <div><button class="button primary copy-install" type="button" data-copy="npm install event-payload-spillway">Copy npm install</button><a class="button secondary" href="https://github.com/B-Divyesh/sf-event-payload-spillway">Read the source</a></div>
+      </section>
+    </main>
+
+    <footer>
+      <div><a class="wordmark" href="/"><span aria-hidden="true">↘</span> Spillway</a><p>Overflow control, not another data platform.</p></div>
+      <nav aria-label="Legal"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-event-payload-spillway/blob/main/LICENSE">MIT license</a></nav>
+    </footer>
+  </body>
+</html>

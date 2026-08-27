@@ -1,0 +1,9 @@
+{
+  "name": "Event Payload Spillway",
+  "short_name": "Spillway",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3ebd8",
+  "theme_color": "#f3ebd8",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
