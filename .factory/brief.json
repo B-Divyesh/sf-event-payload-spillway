@@ -1,0 +1,10 @@
+{
+  "slug": "event-payload-spillway",
+  "title": "Event Payload Spillway",
+  "artifact_class": "library-npm",
+  "user": "A self-hosting developer whose automation or event system receives occasional large base64, media, or JSON payloads and needs to stop one bad event from filling the primary database.",
+  "smallest_useful_product": "A reverse-proxy/library pair that detects configured oversized fields, writes the original encrypted payload to S3-compatible storage, replaces it with a signed reference and preview, and exposes expiry/reclaim reports.",
+  "success_measure": "A test workload with large payloads keeps database growth below 10% of raw payload volume while operators can retrieve a referenced payload within two clicks.",
+  "constraints": ["Explicit spill allowlists", "MinIO and S3-compatible storage", "Webhook verification before transformation", "Retention and legal-hold documentation"],
+  "monetization": "free"
+}
