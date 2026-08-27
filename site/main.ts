@@ -167,4 +167,4 @@ window.addEventListener("online", updateNetwork);
 window.addEventListener("offline", updateNetwork);
 updateNetwork();
 
-if ("serviceWorker" in navigator && location.protocol === "https:") void navigator.serviceWorker.register("/service-worker.js");
+if ("serviceWorker" in navigator && window.isSecureContext) void navigator.serviceWorker.register("/service-worker.js");

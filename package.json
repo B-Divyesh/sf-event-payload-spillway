@@ -47,7 +47,9 @@
     "build:site": "vite build site --outDir ../dist/site --emptyOutDir",
     "build": "npm run build:lib && npm run build:site",
     "test": "npm run build && node --test test/*.test.mjs",
-    "verify:browser": "node scripts/verify-browser.mjs http://127.0.0.1:4173",
+    "verify:browser": "node scripts/verify-browser.mjs",
+    "verify:deployment": "node scripts/verify-deployment-policy.mjs",
+    "verify:pwa": "node scripts/verify-pwa.mjs",
     "check": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {

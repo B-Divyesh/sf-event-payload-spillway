@@ -6,8 +6,9 @@ const require = createRequire(import.meta.url);
 const axePath = require.resolve("axe-core/axe.min.js");
 const url = process.argv[2] ?? "http://127.0.0.1:4173";
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || chromium.executablePath() });
-// axe is injected only by this verifier. Bypass CSP for the test context so a
-// deliberately strict production script-src policy remains testable.
+// axe injects an auditing script. Keep the product CSP strict and bypass it only
+// inside this dedicated Playwright audit context; deployment-policy checks assert
+// the real response headers separately.
 const context = await browser.newContext({ viewport: { width: 390, height: 844 }, bypassCSP: true });
 const page = await context.newPage();
 const errors = [];

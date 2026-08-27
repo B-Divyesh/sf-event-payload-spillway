@@ -121,7 +121,7 @@ npm run build
 npm pack --dry-run
 ```
 
-For the real-browser accessibility and interaction check, start the preview, install Playwright Chromium once with `npx playwright install chromium`, then run `npm run verify:browser`.
+For the real-browser accessibility and interaction check, start the preview, install Playwright Chromium once with `npx playwright install chromium`, then run `npm run verify:browser` (or pass another origin with `npm run verify:browser -- http://127.0.0.1:4174`). For the service-worker/offline shell smoke test, serve the production artifact over HTTPS (or trusted `localhost`) and run `npm run verify:pwa -- http://localhost:4174`.
 
 - `npm run build:lib` writes ESM, CJS, and declarations to `dist/package`.
 - `npm run build:site` writes the static documentation site to `dist/site` (with `index.html` at that root).
@@ -131,7 +131,7 @@ For the demo locally, run `npm run dev` and open `http://localhost:4173`.
 
 ## Deploy
 
-Deploy `dist/site/` as Standard Azure Static Web Apps static content. The emitted `staticwebapp.config.json` applies the browser response policy: a self-only CSP, frame and permissions restrictions, immutable caching for Vite's hashed `/assets/*` files, and `no-cache` for `/service-worker.js`. Do not replace it with a Netlify-style `_headers` file; Static Web Apps does not apply that format. The npm package is prepared with `npm pack`; publishing credentials and deployment are owned by the factory, so this repository does not publish automatically.
+Deploy `dist/site/` as Standard Azure Static Web Apps static content. The emitted `staticwebapp.config.json` applies the browser response policy: a self-only CSP, frame and permissions restrictions, immutable caching for Vite's hashed `/assets/*` files, and `no-cache` for `/service-worker.js`. Do not replace it with a Netlify-style `_headers` file; Static Web Apps does not apply that format. After deployment, verify the live response policy with `npm run verify:deployment -- https://event-payload-spillway.sociobot.in`. The npm package is prepared with `npm pack`; publishing credentials and deployment are owned by the factory, so this repository does not publish automatically.
 
 ## Scope
 
