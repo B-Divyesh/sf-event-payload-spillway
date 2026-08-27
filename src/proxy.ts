@@ -1,5 +1,5 @@
-import { sha256 } from "./bytes.js";
-import type { JsonValue } from "./types.js";
+import { fromBase64Url, sha256, text } from "./bytes.js";
+import type { JsonValue, SpillReferenceData } from "./types.js";
 import { Spillway } from "./spillway.js";
 
 export interface VerifyWebhookInput { rawBody: Uint8Array; headers: Headers; request: Request; }
@@ -10,6 +10,8 @@ export interface SpillwayProxyOptions {
   fetch?: typeof globalThis.fetch;
   maxRequestBytes?: number;
 }
+
+export interface RetrievalHandlerOptions { spillway: Spillway; }
 
 function problem(status: number, title: string, detail: string): Response {
   return Response.json({ type: "about:blank", title, status, detail }, { status, headers: { "content-type": "application/problem+json" } });
@@ -45,6 +47,22 @@ export function createSpillwayProxy(options: SpillwayProxyOptions): (request: Re
       return await fetcher(options.upstream, { method: request.method, headers, body: JSON.stringify(result.payload), redirect: "manual" });
     } catch {
       return problem(502, "Upstream unavailable", "The spill succeeded, but the upstream could not be reached. Retry using your event system's delivery policy.");
+    }
+  };
+}
+
+export function createRetrievalHandler(options: RetrievalHandlerOptions): (request: Request) => Promise<Response> {
+  return async (request: Request): Promise<Response> => {
+    if (request.method !== "GET") return problem(405, "Method not allowed", "Open the signed retrieval URL with GET.");
+    const encoded = new URL(request.url).searchParams.get("ref");
+    if (!encoded || encoded.length > 8_192) return problem(400, "Invalid reference", "The signed retrieval reference is missing or malformed.");
+    try {
+      const reference = JSON.parse(text(fromBase64Url(encoded))) as SpillReferenceData;
+      const value = await options.spillway.retrieve(reference);
+      return Response.json(value, { headers: { "cache-control": "no-store", "content-security-policy": "default-src 'none'", "x-content-type-options": "nosniff" } });
+    } catch (error) {
+      const expired = error instanceof Error && error.message.includes("expired");
+      return problem(expired ? 410 : 404, expired ? "Reference expired" : "Payload unavailable", expired ? "The retention window has ended." : "The signed reference is invalid or its object is missing.");
     }
   };
 }

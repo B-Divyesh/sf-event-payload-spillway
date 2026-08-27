@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import {
-  MemoryStore, S3CompatibleStore, Spillway, createSpillwayProxy, generateKey,
+  MemoryStore, S3CompatibleStore, Spillway, createRetrievalHandler, createSpillwayProxy, generateKey,
 } from "../dist/package/esm/index.js";
 
 const makeSpillway = async (overrides = {}) => new Spillway({
@@ -105,6 +105,20 @@ test("proxy verifies untouched bytes before transforming and does not forward fa
   const rejected = await rejectHandler(new Request("https://proxy.invalid", { method: "POST", headers: { "content-type": "application/json" }, body: raw }));
   assert.equal(rejected.status, 401);
   assert.equal(forwardCalls, 1);
+});
+
+test("signed retrieval URL restores a value through the retrieval handler", async () => {
+  const spillway = await makeSpillway({ publicBaseUrl: "https://hooks.example/__spillway" });
+  const result = await spillway.spill({ result: { attachment: "D".repeat(3_000) } });
+  const url = result.references[0].$spillway.retrieveUrl;
+  assert.ok(url);
+  const response = await createRetrievalHandler({ spillway })(new Request(url));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal((await response.json()).length, 3_000);
+  const tampered = new URL(url);
+  tampered.searchParams.set("ref", tampered.searchParams.get("ref").slice(0, -2) + "zz");
+  assert.equal((await createRetrievalHandler({ spillway })(new Request(tampered))).status, 404);
 });
 
 test("S3-compatible adapter emits SigV4 requests and reads metadata", async () => {

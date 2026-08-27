@@ -43,6 +43,7 @@ function locate(root: JsonValue, pointer: string): { parent: JsonValue[] | { [ke
   const key = parts.at(-1);
   if (key === undefined) return null;
   if (Array.isArray(current)) {
+    if (!/^(?:0|[1-9]\d*)$/u.test(key)) return null;
     const index = Number(key);
     return Number.isInteger(index) && index >= 0 && index < current.length ? { parent: current, key } : null;
   }
@@ -151,7 +152,7 @@ export class Spillway {
         reference.signature = await this.#sign(reference);
         if (this.#config.publicBaseUrl) {
           const base = this.#config.publicBaseUrl.replace(/\/$/u, "");
-          reference.retrieveUrl = `${base}/${encodeURIComponent(id)}?expires=${encodeURIComponent(expiresAt)}&signature=${encodeURIComponent(reference.signature)}`;
+          reference.retrieveUrl = `${base}?ref=${encodeURIComponent(toBase64Url(utf8(JSON.stringify(reference))))}`;
         }
         await this.#config.store.put({
           key: objectKey,
@@ -187,31 +188,37 @@ export class Spillway {
       const wrapped = readAt(location);
       if (!isReference(wrapped)) continue;
       const reference = (wrapped as unknown as SpillReference).$spillway;
-      if (reference.field !== field || !(await this.verifyReference(reference))) throw new Error(`Invalid spill reference at ${field}`);
-      if (!options.allowExpired && new Date(reference.expiresAt).getTime() <= this.#config.now().getTime()) {
-        throw new Error(`Spill reference expired at ${reference.expiresAt}`);
-      }
-      const stored = await this.#config.store.get(reference.objectKey);
-      if (!stored) throw new Error(`Spilled object is missing: ${reference.id}`);
-      const envelope = JSON.parse(text(stored.body)) as CipherEnvelope;
-      if (envelope.algorithm !== "AES-256-GCM" || envelope.aad !== `${reference.id}|${field}|${reference.keyVersion}`) {
-        throw new Error(`Encrypted object metadata does not match reference: ${reference.id}`);
-      }
-      let plaintext: ArrayBuffer;
-      try {
-        plaintext = await crypto.subtle.decrypt(
-          { name: "AES-GCM", iv: cryptoBytes(fromBase64Url(envelope.iv)), additionalData: cryptoBytes(utf8(envelope.aad)) },
-          await aesKey(this.#config.encryptionKey), cryptoBytes(fromBase64Url(envelope.ciphertext)),
-        );
-      } catch {
-        throw new Error(`Unable to decrypt spilled object: ${reference.id}`);
-      }
-      const bytes = new Uint8Array(plaintext);
-      if (!constantTimeEqual(await sha256(bytes), reference.sha256)) throw new Error(`Spilled object failed integrity check: ${reference.id}`);
-      writeAt(location, JSON.parse(text(bytes)) as JsonValue);
+      if (reference.field !== field) throw new Error(`Invalid spill reference at ${field}`);
+      writeAt(location, await this.retrieve(reference, options));
       restoredCount += 1;
     }
     return { payload: output, restoredCount };
+  }
+
+  async retrieve(referenceInput: SpillReference | SpillReferenceData, options: RestoreOptions = {}): Promise<JsonValue> {
+    const reference = "$spillway" in referenceInput ? referenceInput.$spillway : referenceInput;
+    if (!(await this.verifyReference(reference))) throw new Error(`Invalid spill reference: ${reference.id}`);
+    if (!options.allowExpired && new Date(reference.expiresAt).getTime() <= this.#config.now().getTime()) {
+      throw new Error(`Spill reference expired at ${reference.expiresAt}`);
+    }
+    const stored = await this.#config.store.get(reference.objectKey);
+    if (!stored) throw new Error(`Spilled object is missing: ${reference.id}`);
+    const envelope = JSON.parse(text(stored.body)) as CipherEnvelope;
+    if (envelope.algorithm !== "AES-256-GCM" || envelope.aad !== `${reference.id}|${reference.field}|${reference.keyVersion}`) {
+      throw new Error(`Encrypted object metadata does not match reference: ${reference.id}`);
+    }
+    let plaintext: ArrayBuffer;
+    try {
+      plaintext = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: cryptoBytes(fromBase64Url(envelope.iv)), additionalData: cryptoBytes(utf8(envelope.aad)) },
+        await aesKey(this.#config.encryptionKey), cryptoBytes(fromBase64Url(envelope.ciphertext)),
+      );
+    } catch {
+      throw new Error(`Unable to decrypt spilled object: ${reference.id}`);
+    }
+    const bytes = new Uint8Array(plaintext);
+    if (!constantTimeEqual(await sha256(bytes), reference.sha256)) throw new Error(`Spilled object failed integrity check: ${reference.id}`);
+    return JSON.parse(text(bytes)) as JsonValue;
   }
 
   async verifyReference(reference: SpillReferenceData): Promise<boolean> {

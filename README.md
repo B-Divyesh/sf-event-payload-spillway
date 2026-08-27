@@ -78,7 +78,18 @@ const handle = createSpillwayProxy({
 const response = await handle(request);
 ```
 
-The proxy rejects invalid signatures, non-JSON bodies, malformed JSON, and storage failures without forwarding a partial transformation. Successful upstream requests receive `x-spillway-count` and `x-spillway-original-sha256` headers for audit correlation. Signature values themselves are never copied into new headers.
+The proxy rejects invalid signatures, non-JSON bodies, malformed JSON, and storage failures without forwarding a partial transformation. Successful upstream requests receive `x-spillway-count` and `x-spillway-original-sha256` headers for audit correlation. Signature values are never duplicated into Spillway's audit headers.
+
+If `publicBaseUrl` is set, each stub includes a self-contained signed retrieval URL. Route that URL to the provided handler; it verifies the bearer reference, checks expiry, decrypts, and returns the original JSON value with `Cache-Control: no-store`:
+
+```ts
+import { createRetrievalHandler } from "event-payload-spillway";
+
+const retrieve = createRetrievalHandler({ spillway });
+const response = await retrieve(request);
+```
+
+Treat retrieval URLs as secrets. Do not log their query strings, and add your own operator authentication in front of the handler for production use.
 
 ### Retention and legal holds
 
@@ -109,6 +120,8 @@ npm test
 npm run build
 npm pack --dry-run
 ```
+
+For the real-browser accessibility and interaction check, start the preview, install Playwright Chromium once with `npx playwright install chromium`, then run `npm run verify:browser`.
 
 - `npm run build:lib` writes ESM, CJS, and declarations to `dist/package`.
 - `npm run build:site` writes the static documentation site to `dist/site` (with `index.html` at that root).
