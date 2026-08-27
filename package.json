@@ -1,0 +1,41 @@
+{
+  "name": "event-payload-spillway",
+  "version": "0.1.0",
+  "description": "Encrypted overflow control for oversized webhook and event payload fields.",
+  "type": "module",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/B-Divyesh/sf-event-payload-spillway.git"
+  },
+  "homepage": "https://event-payload-spillway.sociobot.in",
+  "keywords": ["webhook", "s3", "minio", "payload", "postgres", "encryption"],
+  "exports": {
+    ".": {
+      "types": "./dist/package/types/index.d.ts",
+      "import": "./dist/package/esm/index.js",
+      "require": "./dist/package/cjs/index.js"
+    }
+  },
+  "main": "./dist/package/cjs/index.js",
+  "module": "./dist/package/esm/index.js",
+  "types": "./dist/package/types/index.d.ts",
+  "files": ["dist/package", "README.md", "LICENSE", "CHANGELOG.md"],
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "dev": "vite site --host 0.0.0.0 --port 4173",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build:lib": "rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build:site": "vite build site --outDir ../dist/site --emptyOutDir",
+    "build": "npm run build:lib && npm run build:site",
+    "test": "npm run build:lib && node --test test/*.test.mjs",
+    "check": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2",
+    "vite": "7.1.3"
+  }
+}
