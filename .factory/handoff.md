@@ -1,65 +1,55 @@
-# Handoff — Event Payload Spillway v0.1.0 — VERIFICATION FAIL
+# Handoff — Event Payload Spillway v0.1.0 — RELEASED
 
-## Independent verifier status (2026-08-27 UTC)
+## Deployment-policy repair
 
-**FAIL — do not release until the deploy-layer headers are fixed.** Independent verification tested candidate `d220b4bbf9d0e00fcc6caceeb7eed90c04658b6e` against https://event-payload-spillway.sociobot.in. Live content hashes match the candidate build and functional/library checks pass, including a real local MinIO smoke test. However, the live host omits the `Content-Security-Policy` and `Permissions-Policy` declared in `site/public/_headers`, and serves assets plus `service-worker.js` with `Cache-Control: public, must-revalidate, max-age=30` instead of the candidate's immutable asset/no-cache worker policies.
+The QA finding on candidate `d220b4bbf9d0e00fcc6caceeb7eed90c04658b6e` is repaired and the static docs are deployed to <https://event-payload-spillway.sociobot.in> as an Azure Static Web Apps **Standard** site.
 
-Severity: **High** for missing browser response security policies; **Medium** for cache/service-worker policy mismatch. This is a deployment-only defect. Exact commands, checks, and remediation are in `.factory/verification.md`.
+- Deployment: `1875b0c2-d89e-44d4-9dc0-4e0096474eb7`.
+- The unsupported `site/public/_headers` file was removed.
+- `site/public/staticwebapp.config.json` is emitted at the root of `dist/site/` and applies a self-only CSP, `X-Frame-Options: DENY`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, `nosniff`, and the existing referrer policy.
+- Its `/assets/*` route gives Vite's content-hashed JS/CSS files `Cache-Control: public, max-age=31536000, immutable`; `/service-worker.js` gets `Cache-Control: no-cache`.
+- Artifact regression tests assert the emitted configuration, all required policies, the cache routes, the absence of `_headers`, and the presence of hashed assets. `npm test` builds the site before running them.
+- The browser verifier now injects axe in a CSP-bypassing **test context only**. The application and deployed response policy remain strict.
 
-## What shipped
+## Verification
 
-- A zero-runtime-dependency TypeScript library with ESM, CommonJS, and declaration outputs.
-- Exact RFC 6901 allowlist decisions and byte thresholds for individual JSON fields.
-- AES-256-GCM encryption before storage, HMAC-SHA-256 signed references, conservative previews, integrity validation, immutable inputs, and rollback after partial storage failure.
-- `MemoryStore` for tests/demo and a SigV4 `S3CompatibleStore` for MinIO or S3, including paginated listing and object metadata inspection.
-- A standards-based reverse proxy that requires verification of untouched webhook bytes before JSON transformation, rejects bad input without forwarding it, and emits audit digests.
-- Signed retrieval URLs plus `createRetrievalHandler`, with signature/expiry checks and `Cache-Control: no-store` responses.
-- Retention reporting, expired-only reclaim, dry runs, bounded non-expiry reclaim, and legal-hold exclusion.
-- An accessible, responsive documentation site with a local-only interactive spill/restore demo, explicit empty/loading/error/offline states, keyboard tabs, privacy/terms pages, CSP/cache headers, manifest, and versioned service-worker shell cache.
-- A product-specific dithered safety-manual visual system and generated hero illustration. The exact prompt, deployment, date, rationale, and license are recorded in `.factory/design.md`.
-
-## Build and run
+Run from a clean clone:
 
 ```sh
-npm install
+npm ci
 npm test
 npm run check
 npm run build
-npm run dev
-```
-
-The exact production command is `npm run build`. It writes the npm artifacts to `dist/package/` and the static deploy to `dist/site/`; `dist/site/index.html` is present at the deploy root.
-
-To prepare the registry artifact without publishing:
-
-```sh
 npm pack --dry-run
 ```
 
-The dry-run tarball is 14.8 KB (74.7 KB unpacked). A clean temporary consumer install successfully required the CommonJS export, imported the ESM export, and read package version `0.1.0`.
+Results from this repair:
 
-## Verification performed
+- `npm ci`: completed; `npm audit --omit=dev`: 0 vulnerabilities.
+- `npm test`: 11/11 pass, including the two emitted-artifact/header regressions and all library/S3-compatible tests.
+- `npm run check` and `npm run build`: pass. The production site contains 13.72 KB JS and 12.60 KB CSS before gzip.
+- A real `npm pack` produced a 14,981-byte tarball (75,035 bytes unpacked). A fresh temporary consumer installed it and imported the ESM plus CommonJS exports successfully.
+- Local production-browser and factory URL checks had zero console/page errors; title, `lang`, one `h1`, `<main>`, image alt text, and button labels all passed.
+- Live Playwright + axe at 390×844: 0 WCAG 2 A/AA violations, 0 serious/critical violations; spill → signed stub → restore and malformed-JSON recovery passed.
+- Live PWA: service worker became controller; an offline reload rendered the cached shell and offline banner with zero console errors.
+- Live response checks pass for `/` (CSP, frame and permissions policies), `/assets/index-Cksnao5Y.js` (immutable one-year cache), and `/service-worker.js` (`no-cache`).
+- Live Lighthouse: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 0.9 s, LCP 1.1 s, TBT 0 ms, CLS 0, total transfer 60 KiB.
 
-- `npm test`: 9/9 pass. Covers the README example and <10% inline-size target, exact allowlisting, preview redaction, tamper rejection, atomic rollback, expiry/legal holds/reclaim, raw webhook verification order, signed HTTP retrieval, SigV4 request behavior, and CommonJS loading.
-- `npm run check`: strict TypeScript passes.
-- `npm run build`: passes with Vite 7.3.6. Initial app output is 13.72 KB JS and 12.60 KB CSS before gzip; there are no runtime CDN/font requests.
-- `npm audit --omit=dev`: 0 vulnerabilities.
-- Factory `verify-url.sh` against the production preview: HTTP 200, 535 ms load, zero page/console errors, title and `lang` present, one `h1`, `<main>` present, zero images missing alt, zero unlabeled buttons.
-- Playwright + axe-core at 390×844: 0 total WCAG 2 A/AA violations, 0 serious/critical violations; spill → signed stub → restore and malformed-JSON recovery pass.
-- Lighthouse 13.4.1 mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100. FCP 0.9 s, LCP 1.5 s, TBT 0 ms, CLS 0, transferred bytes 60 KB.
-- The responsive hero assets are 46 KB at 720×480 and 134 KB at 1200×800.
+## Package and storage behavior
 
-## Security and privacy notes
+The TypeScript library and its MinIO/S3-compatible adapter were not changed by this deployment-only repair. Existing SigV4 and metadata tests pass, and the prior independent verification's real local MinIO put/list/head/get/restore/delete smoke test remains applicable.
 
-- The live demo never uploads or persists payloads. Keys and encrypted objects exist only in tab memory.
-- Retrieval URLs are bearer secrets. Production deployments should place operator authentication in front of `createRetrievalHandler` and avoid query-string logging.
-- Provider signature headers are forwarded as original request headers, but only the required verifier callback authenticates the original bytes; transformed bodies cannot be validated against the provider's original signature.
-- Encryption and signing keys remain host-supplied. They are not logged, stored, or generated by the production library unless the host explicitly calls `generateKey()`.
+## Build and deployment
+
+`npm run build` writes the package to `dist/package/` and the Standard Static Web Apps artifact to `dist/site/`. Deploy the latter with:
+
+```sh
+/opt/fleet/lib/deploy-static.sh event-payload-spillway dist/site
+```
+
+Do not publish the npm package from this checkout. The factory owns registry credentials; use `npm pack` to prepare a release artifact.
 
 ## Known gaps / next steps
 
-- The S3 adapter has deterministic mocked SigV4 coverage but was not exercised against a live MinIO server in this container. Run a MinIO smoke test with the target deployment's TLS and IAM policy before production.
-- Automated key rotation and re-encryption are not included in v0.1; references carry `keyVersion` so a host can route keys during a future migration.
-- Expiry metadata does not itself delete an object. Configure and test a matching bucket lifecycle policy; application reclaim is the observable control path.
-- Upstream outages after a successful spill can leave an encrypted object for the normal retention sweep. Delivery retries remain the event system's responsibility.
-- Antivirus/media validation and general blob serving are intentionally outside this product's scope.
+- No functional gaps introduced by this repair.
+- Production users should continue to configure bucket lifecycle rules, operator authentication for retrieval URLs, and key rotation/re-encryption in the host application as documented in the README.
