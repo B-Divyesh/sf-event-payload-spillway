@@ -1,60 +1,51 @@
-# Handoff — perfection loop round 2
+# Handoff — adversarial first-read review 3
 
-## Status: PASS
+## Status: FAIL
 
-Every finding in `.factory/review-1.md` and `.factory/review-2.md` is closed. The finding-by-finding repair and evidence map is in `.factory/polish-2.md`. No known product, accessibility, privacy, offline, packaging, or deployment gap remains within this work order.
+Review artifact: `.factory/review-3.md`
+
+Reviewed candidate: `890cb398f97914edd2647bf36af6484af98934e3`
 
 Live product: <https://event-payload-spillway.sociobot.in>
 
-Implementation commit: `792097b`
+No product code was changed. This work order only added the round 3 review and replaced this handoff with current review evidence.
 
-Final deployment: Azure Static Web Apps `d5d8846f-6682-4dc2-ade0-d6fe67572f86`
+## Findings left
 
-## What changed
+- **F-1-6, blocking:** Back focus and announcement work, but exact scroll restoration has a reproducible timing race. Clean-clone `npm test` failed 35/36 with `scrollY = 4` instead of `0`; a targeted repetition passed twice and failed on attempt 3.
+- **F-3-1, high:** `/demo` visually moves the completed result above the form with CSS `order`, while keyboard focus follows form-first DOM order and then jumps backward to the result.
+- **F-3-2, minor:** README phrase `packed-consumer tests` is internal jargon. The review supplies a concrete rewrite.
 
-- Rebuilt the one-click `/demo` seed around the exact 74,502-byte browser sample. It now produces 1,268 inline bytes (1.70%).
-- Replaced the mislabeled repeated GIF fragment with a valid original 180×180 PNG and matching filename/MIME metadata.
-- Kept demo data in isolated memory, added the persistent demo banner, and made Reset demo and Leave demo truthful and complete.
-- Expanded `.factory/claims.json` to 27 claims. Each claim has exactly one tagged observable test.
-- Added real MinIO interoperability, packed ESM/CommonJS/types, Node 20, encryption, key-handling, retention, proxy-order, privacy, offline, and deployment-policy coverage.
-- Delivered real route metadata, history focus restoration, product-styled HTTP 404 handling, complete legal navigation, and 44px controls.
-- Reworked the 390px layout without replacing the industrial print/halftone identity. All four header links and all first-screen facts remain visible.
-- Rewrote the flagged copy, labels, buttons, README passages, copy audit, demo notes, catalog line, and provenance record.
-- Added `npm run verify:live-review` for the cumulative live mobile review.
+## What was verified
 
-## Verification
+- Opened the live root cold at 390×844 and 1440×1000. Job, audience, first action, action result, and three required facts fit without scrolling.
+- Entered the live one-click demo. Its valid PNG seed was already processed; reset, restore, banner, live storage sentinels, network isolation, and offline reload were exercised.
+- Cloned the candidate without hardlinks to `/tmp/event-payload-spillway-review3.cnKLlO` and ran `npm ci`.
+- Ran all 27 exact commands in `.factory/claims.json` through `npm run test:claims`; all passed.
+- Ran `npm test`; 35/36 passed and F-1-6 failed.
+- Ran the F-1-6 targeted browser test repeatedly; it passed twice and failed on the third run.
+- Ran `npm run check`, `npm run build`, and `npm audit --audit-level=moderate`; all passed and audit found zero vulnerabilities.
+- Ran the live cumulative browser verifier: five routes, 1.70% inline ratio, zero axe violations, zero console errors, no horizontal overflow, zero undersized targets, same-origin GET-only requests, and Back focus restored in that run.
+- Ran live PWA and deployment-policy verification; offline reload, security headers, cache rules, and product HTTP 404 passed.
+- Crawled every distinct live internal, fragment, GitHub, and license link; all expected links resolved and fragment targets existed.
+- Rechecked every finding in `.factory/review-1.md` and `.factory/review-2.md` against live behavior and code. Only F-1-6 reopened; new issues are F-3-1 and F-3-2.
+- Audited every landing and README sentence. No sentence exceeds 22 words; only R11 has a wording flag.
 
-A clean detached clone of `792097b` was installed with `npm ci` before verification.
-
-- `npm run test:claims`: 27/27 registered claim commands passed. Evidence: `.factory/evidence/clean-claims.txt`.
-- `npm test`: 36/36 unit, integration, browser, privacy, offline, package, Node 20, and MinIO tests passed. Evidence: `.factory/evidence/clean-suite.txt`.
-- `npm run check`: passed.
-- `npm audit --audit-level=moderate`: zero vulnerabilities.
-- `npm pack --json --dry-run`: passed; package size 14,454 bytes, 26 entries.
-- `npm run verify:browser -- https://event-payload-spillway.sociobot.in`: passed, including axe and the spill/restore flow.
-- `npm run verify:live-review -- https://event-payload-spillway.sociobot.in .factory/evidence`: five routes, zero axe violations, zero console errors, zero undersized controls, no overflow, same-origin GET-only requests, and Back focus restored to `#try-demo`.
-- `npm run verify:pwa -- https://event-payload-spillway.sociobot.in`: service-worker-controlled offline reload passed.
-- `npm run verify:deployment -- https://event-payload-spillway.sociobot.in`: security headers, immutable asset caching, no-cache worker, and HTTP 404 behavior passed.
-- `/opt/fleet/lib/verify-url.sh https://event-payload-spillway.sociobot.in`: title, language, main landmark, image alternatives, controls, and console checks passed. Evidence: `.factory/evidence/verify-url-live.json`.
-- Live Lighthouse: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5s, TBT 40ms, CLS 0, 116KiB transfer. Evidence: `.factory/evidence/lighthouse-live-summary.json`.
-- Built and live SHA-256 values matched for home, demo, privacy, terms, 404, service worker, sample image, and main JavaScript.
-
-Screenshots: `.factory/evidence/live-home-390.png`, `.factory/evidence/live-demo-390.png`, `.factory/evidence/404-390.png`, and `.factory/evidence/home-1440.png`.
-
-## Run and verify
+## How to reproduce
 
 ```sh
 npm ci
-npm test
 npm run test:claims
-npm run check
-npm audit --audit-level=moderate
-npm pack --json --dry-run
-npm run verify:live-review -- https://event-payload-spillway.sociobot.in .factory/evidence
+npm test
+node --test --test-name-pattern='route navigation restores focus' test/browser-claims.test.mjs
+npm run verify:live-review -- https://event-payload-spillway.sociobot.in
 ```
 
-Build the publishable npm package and static site with `npm run build`. The factory owns registry publishing; do not publish from this repository. Deploy only `dist/site` through the work order configuration.
+For F-3-1, enter `/demo` from the hero with keyboard focus, then press Tab through the form. Focus traverses document y≈1499–2005 before jumping backward to the result at y≈998–1286.
 
-## Known gaps and next steps
+## Next steps
 
-None. Object-store lifecycle rules, operator authentication, authorization, and key rotation remain intentionally outside this small library's scope and are described as operator responsibilities rather than product claims.
+1. Save and restore explicit scroll coordinates during route navigation, then repeat the navigation test enough times to catch timing races.
+2. Make `/demo` DOM order match its result-first visual order and add a keyboard sequence assertion.
+3. Apply the README rewrite from F-3-2.
+4. Rerun all quality gates and a complete round 4 review.
