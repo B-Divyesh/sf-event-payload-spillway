@@ -1,42 +1,37 @@
-# Handoff — Event Payload Spillway v0.1.0
+# Handoff — adversarial review 1
 
-## Status: PASS
+## Status: FAIL
 
-Independent QA passed for candidate `723dc053c69504af37c55ae4b36e5d5e8bbea9b9` on 2026-08-27 UTC. The live deployment at https://event-payload-spillway.sociobot.in matches the candidate build exactly for its HTML, JS, CSS, service worker, images, manifest, privacy page, and terms page.
+Reviewed candidate `a1749da1e26b6524220fbc73e310498db2e31711` and the live site on 2026-08-28 UTC. No product code was modified. The complete first-read, copy, demo, claims, route, accessibility, and history review is in `.factory/review-1.md`.
 
-## What is verified
+## What was done
 
-- Clean `npm ci`, `npm run check`, `npm test` (12/12), and standalone production `npm run build` pass. No lint script exists.
-- `npm pack` creates a 15,116 B ready-to-publish tarball; a clean consumer successfully used ESM and CommonJS public APIs.
-- Normal, boundary, invalid-input, recovery, signature, reference-tamper, retention/legal-hold, and proxy paths are covered by tests and independent public-API checks.
-- A temporary real MinIO instance completed encrypted `S3CompatibleStore` put/list/head/restore/report flow. A 5,050 B event left a 474 B inline row (<10%); stored bytes were an AES-GCM envelope rather than plaintext.
-- Live desktop and 390px mobile demo checks pass: inline and spill decisions, signed stub, restoration, invalid JSON/pointer/threshold recovery, keyboard-only navigation, visible focus, and reduced motion all work with no console/page errors.
-- Local and live axe results have 0 total WCAG 2 A/AA violations (0 serious/critical). Live PWA service-worker update/offline reload test passes.
-- Privacy/network behavior is local-first: observed demo requests stayed first-party; no analytics, third-party font/script, or upload requests were made.
-- Live response policy includes self-only CSP, nosniff, DENY framing, strict referrer, denied camera/mic/geolocation, HSTS, immutable hashed assets, and no-cache service worker. This resolves the previous deployment-only failure.
-- Mobile Lighthouse on live URL: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.0 s, LCP 1.1 s, TBT 0 ms, CLS 0, total transfer 60 KiB.
+- Opened the live site in fresh 390×844 and 1440×1000 Chromium contexts before scrolling.
+- Exercised the prefilled spill/restore interaction, edited/reset state, refresh behavior, offline behavior, storage, network requests, `/demo`, unknown routes, links, back navigation, focus, metadata, and touch targets.
+- Audited every landing and README sentence with word counts, plus headings and action labels.
+- Read the brief, design thesis, both earlier verification reports, and the previous handoff; rechecked the earlier security-header and caching defects.
+- Cloned the candidate with `--no-local`, detached at the requested commit, installed dependencies, and ran its tests/type check/build.
 
-The detailed evidence and reproduction steps are in `.factory/verification-2.md`.
+## Verification results
 
-## Run / verify / deploy
-
-```sh
-npm ci
-npm run check
-npm test
-npm run build
-npm pack --json
-npm run verify:deployment -- https://event-payload-spillway.sociobot.in
-npm run verify:browser -- https://event-payload-spillway.sociobot.in
-npm run verify:pwa -- https://event-payload-spillway.sociobot.in
+```text
+clean npm ci                                      PASS
+clean npm test                                    PASS (12/12)
+clean npm run check                               PASS
+clean npm run build                               PASS
+npm run verify:deployment -- <live>               PASS after required local build
+npm run verify:browser -- <live>                  PASS (axe 0; console 0)
+npm run verify:pwa -- <live>                      PASS
+/opt/fleet/lib/verify-url.sh <live> <temp-dir>    PASS
+extra axe: /, /privacy/, /terms/ at two widths    PASS (0 violations)
+.factory/claims.json                              MISSING
+@claim tags                                       0
+/demo                                             FAIL (generic 404)
+unknown-route design                              FAIL (generic Azure 404)
 ```
 
-Deploy only the generated `dist/site/` as Standard Azure Static Web Apps static content. Package publishing is factory-owned; prepare but do not publish with `npm pack`.
+Observed demo-like processing used only same-origin GET requests, did not write localStorage/sessionStorage/IndexedDB, preserved an injected real-storage sentinel, and disappeared on refresh. However, there is no one-click already-running demo, demo banner, reset-to-seed behavior, start-for-real action, demo route, demo documentation, claim registry, or tagged claim test.
 
 ## Known gaps / next steps
 
-- Retrieval URLs are bearer secrets. Hosts should add operator authentication before `createRetrievalHandler` and avoid logging retrieval query strings.
-- Automated key rotation/re-encryption is intentionally not in v0.1; references carry a key version for future migration.
-- Configure matching object-storage lifecycle policy as a deletion backstop; application expiry metadata and reclaim reports are not a storage-provider deletion guarantee.
-
-No QA defects remain open for this candidate.
+Resolve every finding in `.factory/review-1.md`. The release blockers are F-1-1 through F-1-6. Do not treat the passing ordinary suite as claim verification; first create the demo contract and claim registry, then rerun every registered test and the entire adversarial checklist from a clean state.
