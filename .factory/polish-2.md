@@ -6,7 +6,7 @@ Review baseline: `642dd7d` / candidate `cc3540d`
 
 Live site: <https://event-payload-spillway.sociobot.in>
 
-Deployment: Azure Static Web Apps deployment `b9f152d9-e53e-4cd7-b63b-30030d6da22e`
+Final deployment: Azure Static Web Apps `d5d8846f-6682-4dc2-ade0-d6fe67572f86`
 
 The live cold-check measured the shipped demo at 74,502 raw bytes and 1,268 inline bytes: **1.70%**. The same check found zero axe violations, zero console errors, no horizontal overflow, no undersized targets, and restored Back focus to `#try-demo`.
 

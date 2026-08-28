@@ -8,7 +8,7 @@ Live product: <https://event-payload-spillway.sociobot.in>
 
 Implementation commit: `792097b`
 
-Deployment: Azure Static Web Apps `b9f152d9-e53e-4cd7-b63b-30030d6da22e`
+Final deployment: Azure Static Web Apps `d5d8846f-6682-4dc2-ade0-d6fe67572f86`
 
 ## What changed
 
