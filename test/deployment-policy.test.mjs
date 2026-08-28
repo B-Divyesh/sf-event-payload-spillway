@@ -27,6 +27,8 @@ test("Static Web Apps policy is emitted unchanged with security and cache routes
     { route: "/assets/*", headers: { "Cache-Control": "public, max-age=31536000, immutable" } },
     { route: "/service-worker.js", headers: { "Cache-Control": "no-cache" } },
   ]);
+  assert.equal(config.navigationFallback.rewrite, "/index.html");
+  assert.equal(config.responseOverrides["404"].rewrite, "/404.html");
 });
 
 test("site artifact contains hashed Vite assets covered by the immutable cache rule", () => {

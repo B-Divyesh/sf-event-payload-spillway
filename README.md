@@ -1,8 +1,12 @@
 # Event Payload Spillway
 
-Event Payload Spillway is a small, zero-runtime-dependency TypeScript library for self-hosted webhook and automation systems. It keeps explicitly allowed oversized JSON fields out of a primary database: values are encrypted, written to S3-compatible storage, and replaced by a signed, readable reference with a safe preview and expiry.
+Event Payload Spillway is an npm library for self-hosted webhook and automation systems.
+It moves explicitly allowed oversized JSON fields out of database rows.
+It encrypts each value before writing it to S3-compatible storage.
+The event keeps a signed reference with a redacted preview and expiry.
 
-It is for developers who occasionally receive base64, media, or large JSON values and want an overflow control—not a queue, CDN, or observability platform.
+It is for developers whose events sometimes contain base64, media, or large JSON values.
+It is not a queue, CDN, monitoring service, scanner, or legal-retention system.
 
 ## Install
 
@@ -10,11 +14,13 @@ It is for developers who occasionally receive base64, media, or large JSON value
 npm install event-payload-spillway
 ```
 
-The package ships ESM, CommonJS, and TypeScript declarations. It requires a runtime with Web Crypto and `fetch` (Node 20+ or a modern edge/browser runtime).
+The package ships ESM, CommonJS, and TypeScript declarations.
+It has no runtime dependencies or telemetry.
+Use Node 20+ with Web Crypto and fetch.
 
 ## Usage
 
-Only JSON pointers in `allowlist` can ever leave the incoming object. This is intentionally explicit so an unexpected secret field cannot be spilled.
+Only exact JSON Pointers in `allowlist` can spill.
 
 ```ts
 import { Spillway, MemoryStore, generateKey } from "event-payload-spillway";
@@ -34,16 +40,13 @@ const output = await spillway.spill({
   result: { attachment: "A".repeat(80_000) },
 });
 
-console.log(output.spilledCount); // 1
-console.log(output.payload.result.attachment.$spillway.preview);
-
 const restored = await spillway.restore(output.payload);
 console.log(restored.restoredCount); // 1
 ```
 
-The documented example above is covered by the test suite.
+The packed-consumer test covers this example.
 
-### S3 or MinIO
+## S3-compatible storage
 
 ```ts
 import { S3CompatibleStore } from "event-payload-spillway";
@@ -58,11 +61,15 @@ const store = new S3CompatibleStore({
 });
 ```
 
-Create the bucket first and give this identity `GetObject`, `PutObject`, `DeleteObject`, `ListBucket`, and `HeadObject` permission for the configured prefix. Objects are encrypted before upload; use TLS outside localhost.
+Create the bucket before use.
+Allow GetObject, PutObject, DeleteObject, ListBucket, and HeadObject for the chosen prefix.
+Objects are encrypted before upload.
+Use TLS outside localhost.
 
-### Reverse proxy
+## Reverse proxy and retrieval
 
-`createSpillwayProxy` verifies the untouched request bytes before parsing and transforming them. That ordering matters: an upstream webhook signature no longer describes the transformed body.
+`createSpillwayProxy` verifies untouched request bytes before parsing.
+It requires a `verifyWebhook` callback.
 
 ```ts
 import { createSpillwayProxy } from "event-payload-spillway";
@@ -70,72 +77,72 @@ import { createSpillwayProxy } from "event-payload-spillway";
 const handle = createSpillwayProxy({
   spillway,
   upstream: "http://automation:3000/events",
-  verifyWebhook: async ({ rawBody, headers }) => {
-    return verifyProviderSignature(rawBody, headers.get("x-hook-signature"));
-  },
+  verifyWebhook: ({ rawBody, headers }) => verify(rawBody, headers),
 });
-
-const response = await handle(request);
 ```
 
-The proxy rejects invalid signatures, non-JSON bodies, malformed JSON, and storage failures without forwarding a partial transformation. Successful upstream requests receive `x-spillway-count` and `x-spillway-original-sha256` headers for audit correlation. Signature values are never duplicated into Spillway's audit headers.
+The proxy does not forward rejected or partially transformed requests.
+Successful requests include spill count and original digest headers.
+Provider signature values are never copied into those headers.
 
-If `publicBaseUrl` is set, each stub includes a self-contained signed retrieval URL. Route that URL to the provided handler; it verifies the bearer reference, checks expiry, decrypts, and returns the original JSON value with `Cache-Control: no-store`:
+If `publicBaseUrl` is set, each signed reference includes a retrieval URL.
+Route it to `createRetrievalHandler`.
+It verifies the reference and expiry before reading storage.
+It decrypts the value and returns `Cache-Control: no-store`.
+Treat retrieval URLs as secrets.
+Add operator authentication before the handler in production.
 
-```ts
-import { createRetrievalHandler } from "event-payload-spillway";
+## Retention and safety
 
-const retrieve = createRetrievalHandler({ spillway });
-const response = await retrieve(request);
-```
+`retentionReport()` counts objects, encrypted bytes, and expired bytes.
+`reclaim()` uses expired-only candidates by default.
+Use `dryRun: true` before deleting.
+Pass `legalHold: true` when spilling a held value.
+Reclaim excludes it until your storage policy removes the hold.
 
-Treat retrieval URLs as secrets. Do not log their query strings, and add your own operator authentication in front of the handler for production use.
+Values use AES-256-GCM with a random 96-bit IV.
+References use HMAC-SHA-256 and are verified before storage reads.
+Plaintext integrity is checked after decryption.
+Keys come from the host and are never written to the spill store.
+Previews redact likely tokens, data URIs, and long base64.
+References include a key version.
+Automated key rotation is not included in v0.1.
+Expiry metadata does not guarantee deletion.
+Add a matching bucket lifecycle rule and review retention requirements before enabling deletion.
 
-### Retention and legal holds
+## Demo
 
-```ts
-const report = await spillway.retentionReport();
-const preview = await spillway.reclaim({ expiredOnly: true, dryRun: true });
-const reclaimed = await spillway.reclaim({ expiredOnly: true });
-```
-
-`retentionReport()` reports object count, encrypted bytes, and expired bytes. `reclaim()` defaults to expired objects only and supports dry runs. Set `legalHold: true` when calling `spill(payload, { legalHold: true })`; held objects are excluded from reclaim until your own policy explicitly removes the hold in storage. Expiry is application policy, not a guarantee: configure a matching bucket lifecycle rule as a backstop and review regulatory retention requirements before enabling deletion.
-
-## Security model
-
-- No field is spilled unless its exact RFC 6901 JSON pointer is allowed.
-- Values use AES-256-GCM with a random 96-bit IV; references use HMAC-SHA-256.
-- References are verified before storage reads and encrypted plaintext is hash-checked after decryption.
-- Keys are supplied by the host and never written to storage or logs.
-- Preview text redacts likely tokens, data URIs, and long base64 rather than echoing them.
-- Rotate keys with an application-level migration; v0.1 references identify their key version but automated rotation is not yet included.
-
-Do not put access keys in frontend code. The live demo uses the in-memory adapter and local Web Crypto only; it makes no uploads and keeps no payload after refresh.
+Open [the demo](https://event-payload-spillway.sociobot.in/demo) or `?demo=1` on the landing page.
+It immediately runs a realistic render event in browser memory.
+The banner identifies sample mode and offers Reset demo and Start for real.
+Demo keys, encrypted objects, and edits disappear on refresh.
+The demo makes no payload uploads and writes no browser storage.
+See [.factory/demo.md](.factory/demo.md) for its isolation contract.
 
 ## Development
 
 ```sh
-npm install
+npm ci
 npm test
+npm run check
 npm run build
 npm pack --dry-run
 ```
 
-For the real-browser accessibility and interaction check, start the preview, install Playwright Chromium once with `npx playwright install chromium`, then run `npm run verify:browser` (or pass another origin with `npm run verify:browser -- http://127.0.0.1:4174`). For the service-worker/offline shell smoke test, serve the production artifact over HTTPS (or trusted `localhost`) and run `npm run verify:pwa -- http://localhost:4174`.
-
-- `npm run build:lib` writes ESM, CJS, and declarations to `dist/package`.
-- `npm run build:site` writes the static documentation site to `dist/site` (with `index.html` at that root).
-- `npm run build` produces both.
-
-For the demo locally, run `npm run dev` and open `http://localhost:4173`.
+`npm run build:lib` writes ESM, CJS, and declarations to `dist/package`.
+`npm run build:site` writes the static site to `dist/site`.
+`npm run build` produces both artifacts.
+Run `npm run verify:browser -- http://127.0.0.1:4174` against a preview.
+Run `npm run verify:pwa -- http://127.0.0.1:4174` for the offline shell.
 
 ## Deploy
 
-Deploy `dist/site/` as Standard Azure Static Web Apps static content. The emitted `staticwebapp.config.json` applies the browser response policy: a self-only CSP, frame and permissions restrictions, immutable caching for Vite's hashed `/assets/*` files, and `no-cache` for `/service-worker.js`. Do not replace it with a Netlify-style `_headers` file; Static Web Apps does not apply that format. After deployment, verify the live response policy with `npm run verify:deployment -- https://event-payload-spillway.sociobot.in`. The npm package is prepared with `npm pack`; publishing credentials and deployment are owned by the factory, so this repository does not publish automatically.
-
-## Scope
-
-Spillway is not a durable queue, general-purpose blob CDN, database proxy, malware scanner, or legal-retention system. A spill succeeds only after object storage confirms the encrypted write. Your event system remains responsible for delivery and retries.
+Deploy `dist/site/` as Azure Static Web Apps static content.
+`staticwebapp.config.json` sets browser security headers and cache rules.
+It rewrites unknown routes to the product 404 page.
+Run `npm run verify:deployment -- https://event-payload-spillway.sociobot.in` after deployment.
+Use `npm pack` to prepare the library for publishing.
+The factory owns publishing credentials and deployment.
 
 ## License
 

@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
+import { readFileSync } from "node:fs";
 import {
   MemoryStore, S3CompatibleStore, Spillway, createRetrievalHandler, createSpillwayProxy, generateKey,
 } from "../dist/package/esm/index.js";
@@ -15,7 +16,7 @@ const makeSpillway = async (overrides = {}) => new Spillway({
   ...overrides,
 });
 
-test("documented spill and restore keeps the database row below 10%", async () => {
+test("@claim:inline-reduction documented spill and restore keeps the database row below 10%", async () => {
   const spillway = await makeSpillway();
   const original = { event: "render.complete", result: { attachment: "A".repeat(80_000) } };
   const result = await spillway.spill(original);
@@ -28,7 +29,23 @@ test("documented spill and restore keeps the database row below 10%", async () =
   assert.deepEqual(restored.payload, original);
 });
 
-test("only exact allowlisted pointers can spill", async () => {
+test("@claim:encryption-envelope stores AES-256-GCM ciphertext and redacts encoded previews", async () => {
+  const store = new MemoryStore();
+  const spillway = await makeSpillway({ store });
+  const secret = `data:image/png;base64,${"A".repeat(4_000)}`;
+  const result = await spillway.spill({ result: { attachment: secret } });
+  const reference = result.references[0].$spillway;
+  const object = await store.get(reference.objectKey);
+  assert.ok(object);
+  const envelope = JSON.parse(new TextDecoder().decode(object.body));
+  assert.equal(envelope.algorithm, "AES-256-GCM");
+  assert.equal(Buffer.from(envelope.iv.replaceAll("-", "+").replaceAll("_", "/"), "base64").byteLength, 12);
+  assert.equal(new TextDecoder().decode(object.body).includes(secret), false);
+  assert.match(reference.preview, /redacted encoded string/u);
+  assert.equal(await spillway.verifyReference(reference), true);
+});
+
+test("@claim:allowlist only exact allowlisted pointers can spill", async () => {
   const spillway = await makeSpillway();
   const secret = "sk_secret_" + "z".repeat(4_000);
   const result = await spillway.spill({ secret, result: { attachment: "small" } });
@@ -36,7 +53,7 @@ test("only exact allowlisted pointers can spill", async () => {
   assert.equal(result.payload.secret, secret);
 });
 
-test("tampered references are rejected before retrieval", async () => {
+test("@claim:reference-integrity tampered references are rejected before retrieval", async () => {
   const store = new MemoryStore();
   const spillway = await makeSpillway({ store });
   const result = await spillway.spill({ result: { attachment: "B".repeat(5_000) } });
@@ -44,7 +61,7 @@ test("tampered references are rejected before retrieval", async () => {
   await assert.rejects(spillway.restore(result.payload), /Invalid spill reference/u);
 });
 
-test("a failed multi-field spill rolls back objects already written", async () => {
+test("@claim:write-confirmation a failed multi-field spill rolls back objects already written", async () => {
   class FailSecondStore extends MemoryStore {
     calls = 0;
     async put(input) {
@@ -59,7 +76,7 @@ test("a failed multi-field spill rolls back objects already written", async () =
   assert.deepEqual(await store.list(), []);
 });
 
-test("retention reports expiry and reclaim excludes legal holds", async () => {
+test("@claim:retention retention reports expiry and reclaim excludes legal holds", async () => {
   let now = new Date("2026-01-01T00:00:00.000Z");
   const store = new MemoryStore();
   const spillway = await makeSpillway({ store, expiresInMs: 1_000, now: () => now });
@@ -78,7 +95,7 @@ test("retention reports expiry and reclaim excludes legal holds", async () => {
   assert.equal((await store.list()).length, 1);
 });
 
-test("proxy verifies untouched bytes before transforming and does not forward failures", async () => {
+test("@claim:proxy-order proxy verifies untouched bytes before transforming and does not forward failures", async () => {
   const raw = JSON.stringify({ result: { attachment: "C".repeat(3_000) } });
   let verifiedBody = "";
   let forwardedBody = "";
@@ -107,7 +124,7 @@ test("proxy verifies untouched bytes before transforming and does not forward fa
   assert.equal(forwardCalls, 1);
 });
 
-test("signed retrieval URL restores a value through the retrieval handler", async () => {
+test("@claim:retrieval signed retrieval URL restores a value through the retrieval handler", async () => {
   const spillway = await makeSpillway({ publicBaseUrl: "https://hooks.example/__spillway" });
   const result = await spillway.spill({ result: { attachment: "D".repeat(3_000) } });
   const url = result.references[0].$spillway.retrieveUrl;
@@ -121,7 +138,7 @@ test("signed retrieval URL restores a value through the retrieval handler", asyn
   assert.equal((await createRetrievalHandler({ spillway })(new Request(tampered))).status, 404);
 });
 
-test("S3-compatible adapter emits SigV4 requests and reads metadata", async () => {
+test("@claim:s3-contract S3-compatible adapter emits SigV4 requests and reads metadata", async () => {
   const calls = [];
   const store = new S3CompatibleStore({
     endpoint: "http://minio.local:9000",
@@ -143,9 +160,12 @@ test("S3-compatible adapter emits SigV4 requests and reads metadata", async () =
   assert.match(calls[0].init.headers.authorization, /^AWS4-HMAC-SHA256/u);
 });
 
-test("CommonJS entry point can be required", () => {
+test("@claim:package-output CommonJS entry point can be required", () => {
   const require = createRequire(import.meta.url);
   const commonjs = require("../dist/package/cjs/index.js");
   assert.equal(typeof commonjs.Spillway, "function");
   assert.equal(typeof commonjs.createSpillwayProxy, "function");
+  const manifest = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.deepEqual(manifest.dependencies ?? {}, {});
+  assert.equal(typeof Spillway, "function", "the ESM import above is the package public API");
 });
