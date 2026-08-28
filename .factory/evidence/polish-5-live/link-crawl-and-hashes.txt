@@ -1,0 +1,115 @@
+{
+  "pages": [
+    {
+      "route": "/",
+      "status": 200,
+      "sha256": "babe62bc273360af91c75caec56e0ccca537871f63b2cf210ed59a994c9a2556",
+      "matchesBuild": true
+    },
+    {
+      "route": "/demo",
+      "status": 200,
+      "sha256": "72c19ad2c89efa96bb08ea96b5dbd6d4640d35fd597b4de1506d1522e791928b",
+      "matchesBuild": true
+    },
+    {
+      "route": "/privacy/",
+      "status": 200,
+      "sha256": "27a503f6113599ab6b30971002694e21aeacf01e8b80f01c5e8a8116a861a8fa",
+      "matchesBuild": true
+    },
+    {
+      "route": "/terms/",
+      "status": 200,
+      "sha256": "51d06d1f2726799c62554c8ec261589750d2403305e92c0c11d9c1a09a0e408f",
+      "matchesBuild": true
+    },
+    {
+      "route": "/404.html",
+      "status": 200,
+      "sha256": "e17d1a21bd642b1e3f2d70722d27b9bfe62d4c803c6296f3b2b17b8de144775b",
+      "matchesBuild": true
+    }
+  ],
+  "links": [
+    {
+      "href": "https://event-payload-spillway.sociobot.in/",
+      "status": 200,
+      "external": true
+    },
+    {
+      "href": "/favicon.svg",
+      "status": 200
+    },
+    {
+      "href": "/apple-touch-icon.png",
+      "status": 200
+    },
+    {
+      "href": "/manifest.webmanifest",
+      "status": 200
+    },
+    {
+      "href": "/assets/main-Bzg6df4l.css",
+      "status": 200
+    },
+    {
+      "href": "#main",
+      "status": 200
+    },
+    {
+      "href": "/",
+      "status": 200
+    },
+    {
+      "href": "/demo",
+      "status": 200
+    },
+    {
+      "href": "#install",
+      "status": 200
+    },
+    {
+      "href": "/privacy/",
+      "status": 200
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-event-payload-spillway",
+      "status": 200,
+      "external": true
+    },
+    {
+      "href": "/terms/",
+      "status": 200
+    },
+    {
+      "href": "https://github.com/B-Divyesh/sf-event-payload-spillway/blob/main/LICENSE",
+      "status": 200,
+      "external": true
+    },
+    {
+      "href": "https://event-payload-spillway.sociobot.in/demo",
+      "status": 200,
+      "external": true
+    },
+    {
+      "href": "/#install",
+      "status": 200
+    },
+    {
+      "href": "https://event-payload-spillway.sociobot.in/privacy/",
+      "status": 200,
+      "external": true
+    },
+    {
+      "href": "https://event-payload-spillway.sociobot.in/terms/",
+      "status": 200,
+      "external": true
+    },
+    {
+      "href": "https://event-payload-spillway.sociobot.in/404",
+      "status": 200,
+      "external": true
+    }
+  ]
+}

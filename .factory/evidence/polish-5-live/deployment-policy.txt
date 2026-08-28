@@ -1,0 +1,5 @@
+
+> event-payload-spillway@0.1.0 verify:deployment
+> node scripts/verify-deployment-policy.mjs https://event-payload-spillway.sociobot.in
+
+{"url":"https://event-payload-spillway.sociobot.in","securityHeaders":["Content-Security-Policy","X-Content-Type-Options","X-Frame-Options","Referrer-Policy","Permissions-Policy"],"asset":"/assets/main-qLVGIe7V.js","assetCacheControl":"public, max-age=31536000, immutable","serviceWorkerCacheControl":"no-cache","unknownRouteStatus":404}

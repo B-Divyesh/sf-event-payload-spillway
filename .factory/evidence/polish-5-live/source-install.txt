@@ -1,0 +1,70 @@
+Cloning into 'spillway-src'...
+9afe1ebe5d3166255d72cf85efa19b9d12c812f1
+
+added 19 packages, and audited 20 packages in 1s
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+npm notice
+npm notice 📦  event-payload-spillway@0.1.0
+npm notice Tarball Contents
+npm notice 640B CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 5.6kB README.md
+npm notice 2.0kB dist/package/cjs/bytes.js
+npm notice 1.2kB dist/package/cjs/index.js
+npm notice 1.1kB dist/package/cjs/memory-store.js
+npm notice 20B dist/package/cjs/package.json
+npm notice 4.3kB dist/package/cjs/proxy.js
+npm notice 7.7kB dist/package/cjs/s3-store.js
+npm notice 14.3kB dist/package/cjs/spillway.js
+npm notice 77B dist/package/cjs/types.js
+npm notice 1.5kB dist/package/esm/bytes.js
+npm notice 229B dist/package/esm/index.js
+npm notice 959B dist/package/esm/memory-store.js
+npm notice 4.1kB dist/package/esm/proxy.js
+npm notice 7.4kB dist/package/esm/s3-store.js
+npm notice 13.8kB dist/package/esm/spillway.js
+npm notice 11B dist/package/esm/types.js
+npm notice 639B dist/package/types/bytes.d.ts
+npm notice 689B dist/package/types/index.d.ts
+npm notice 372B dist/package/types/memory-store.d.ts
+npm notice 699B dist/package/types/proxy.d.ts
+npm notice 683B dist/package/types/s3-store.d.ts
+npm notice 839B dist/package/types/spillway.d.ts
+npm notice 2.5kB dist/package/types/types.d.ts
+npm notice 2.0kB package.json
+npm notice Tarball Details
+npm notice name: event-payload-spillway
+npm notice version: 0.1.0
+npm notice filename: event-payload-spillway-0.1.0.tgz
+npm notice package size: 14.7 kB
+npm notice unpacked size: 74.4 kB
+npm notice shasum: 09dec7b34d69868c35e86ee105882eb47ccf940e
+npm notice integrity: sha512-KYHQIB7o9QWRH[...]gmSdVYOn4aXBQ==
+npm notice total files: 26
+npm notice
+event-payload-spillway-0.1.0.tgz
+
+added 1 package, and audited 2 packages in 439ms
+
+found 0 vulnerabilities
+source tarball install and restore passed

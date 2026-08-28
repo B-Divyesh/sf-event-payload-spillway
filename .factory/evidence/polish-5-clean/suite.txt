@@ -1,0 +1,291 @@
+
+> event-payload-spillway@0.1.0 test
+> npm run build && node --test test/*.test.mjs
+
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.01 kB
+../dist/site/index.html                13.17 kB │ gzip: 4.07 kB
+../dist/site/assets/main-Bzg6df4l.css  14.87 kB │ gzip: 4.19 kB
+../dist/site/assets/main-qLVGIe7V.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 232ms
+TAP version 13
+# Subtest: @claim:inline-reduction the exact shipped demo keeps the database row below 10%
+ok 1 - @claim:inline-reduction the exact shipped demo keeps the database row below 10%
+  ---
+  duration_ms: 1853.193192
+  type: 'test'
+  ...
+# Subtest: @claim:demo-media the shipped attachment is a valid PNG with matching metadata
+ok 2 - @claim:demo-media the shipped attachment is a valid PNG with matching metadata
+  ---
+  duration_ms: 1248.429327
+  type: 'test'
+  ...
+# Subtest: @claim:demo-seed /demo opens with a completed sample and Reset demo restores it
+ok 3 - @claim:demo-seed /demo opens with a completed sample and Reset demo restores it
+  ---
+  duration_ms: 1720.337205
+  type: 'test'
+  ...
+# Subtest: @claim:demo-privacy demo isolates every browser store and never persists or uploads edited payloads
+ok 4 - @claim:demo-privacy demo isolates every browser store and never persists or uploads edited payloads
+  ---
+  duration_ms: 2341.7852
+  type: 'test'
+  ...
+# Subtest: @claim:no-telemetry site and library execution emit no analytics, beacons, sockets, or logs
+ok 5 - @claim:no-telemetry site and library execution emit no analytics, beacons, sockets, or logs
+  ---
+  duration_ms: 1058.117614
+  type: 'test'
+  ...
+# Subtest: @claim:demo-route ?demo=1 enters the isolated seeded demo
+ok 6 - @claim:demo-route ?demo=1 enters the isolated seeded demo
+  ---
+  duration_ms: 1014.672931
+  type: 'test'
+  ...
+# Subtest: @claim:site-routes every route has complete metadata and unknown paths return the shared product 404
+ok 7 - @claim:site-routes every route has complete metadata and unknown paths return the shared product 404
+  ---
+  duration_ms: 3154.57314
+  type: 'test'
+  ...
+# Subtest: route navigation restores the exact saved position, focus, and announcement repeatedly
+ok 8 - route navigation restores the exact saved position, focus, and announcement repeatedly
+  ---
+  duration_ms: 9515.230163
+  type: 'test'
+  ...
+# Subtest: demo keyboard order follows the visible result before the editor
+ok 9 - demo keyboard order follows the visible result before the editor
+  ---
+  duration_ms: 927.629866
+  type: 'test'
+  ...
+# Subtest: 390px routes have no overflow, keep navigation, and expose 44px targets
+ok 10 - 390px routes have no overflow, keep navigation, and expose 44px targets
+  ---
+  duration_ms: 3177.082128
+  type: 'test'
+  ...
+# Subtest: mobile and desktop first screens include the action note and all three facts
+ok 11 - mobile and desktop first screens include the action note and all three facts
+  ---
+  duration_ms: 1634.360835
+  type: 'test'
+  ...
+# Subtest: source installation is disclosed and copies the complete tarball workflow
+ok 12 - source installation is disclosed and copies the complete tarball workflow
+  ---
+  duration_ms: 820.247502
+  type: 'test'
+  ...
+# Subtest: all routes pass axe, semantic, keyboard-focus, and console checks
+ok 13 - all routes pass axe, semantic, keyboard-focus, and console checks
+  ---
+  duration_ms: 4316.734435
+  type: 'test'
+  ...
+# Subtest: @claim:offline-demo warmed demo reloads offline and restores the sample
+ok 14 - @claim:offline-demo warmed demo reloads offline and restores the sample
+  ---
+  duration_ms: 3466.516309
+  type: 'test'
+  ...
+# Subtest: @claim:deployment-policy emitted Static Web Apps config sets security, cache, and real 404 behavior
+ok 15 - @claim:deployment-policy emitted Static Web Apps config sets security, cache, and real 404 behavior
+  ---
+  duration_ms: 3.476191
+  type: 'test'
+  ...
+# Subtest: site artifact contains hashed Vite assets covered by the immutable cache rule
+ok 16 - site artifact contains hashed Vite assets covered by the immutable cache rule
+  ---
+  duration_ms: 0.646099
+  type: 'test'
+  ...
+# Subtest: header routes separate immutable build assets from the update-checked service worker
+ok 17 - header routes separate immutable build assets from the update-checked service worker
+  ---
+  duration_ms: 0.458099
+  type: 'test'
+  ...
+# Subtest: @claim:s3-compatibility completes encrypted put, list, head, get, restore, and delete against MinIO
+ok 18 - @claim:s3-compatibility completes encrypted put, list, head, get, restore, and delete against MinIO
+  ---
+  duration_ms: 1613.098028
+  type: 'test'
+  ...
+# Subtest: @claim:package-formats a source checkout builds an installable tarball with ESM, CommonJS, declarations, and zero runtime dependencies
+ok 19 - @claim:package-formats a source checkout builds an installable tarball with ESM, CommonJS, declarations, and zero runtime dependencies
+  ---
+  duration_ms: 4531.460741
+  type: 'test'
+  ...
+# Subtest: @claim:registry-availability version 0.1.0 is not published to the npm registry
+ok 20 - @claim:registry-availability version 0.1.0 is not published to the npm registry
+  ---
+  duration_ms: 353.170035
+  type: 'test'
+  ...
+# Subtest: @claim:required-config landing copy names every required SpillwayConfig property
+ok 21 - @claim:required-config landing copy names every required SpillwayConfig property
+  ---
+  duration_ms: 0.847096
+  type: 'test'
+  ...
+# Subtest: @claim:node20-runtime the packed README example runs on Node 20
+ok 22 - @claim:node20-runtime the packed README example runs on Node 20
+  ---
+  duration_ms: 2400.429408
+  type: 'test'
+  ...
+# Subtest: @claim:build-artifacts build emits ESM, CommonJS, declarations, and the static site
+ok 23 - @claim:build-artifacts build emits ESM, CommonJS, declarations, and the static site
+  ---
+  duration_ms: 0.344198
+  type: 'test'
+  ...
+# Subtest: @claim:license-price the package is MIT licensed and the demo has no paid gate
+ok 24 - @claim:license-price the package is MIT licensed and the demo has no paid gate
+  ---
+  duration_ms: 3.010785
+  type: 'test'
+  ...
+# Subtest: large documented spill restores without mutating its input
+ok 25 - large documented spill restores without mutating its input
+  ---
+  duration_ms: 94.597927
+  type: 'test'
+  ...
+# Subtest: @claim:crypto-format uses AES-256-GCM, unique 96-bit IVs, and HMAC-SHA-256 references
+ok 26 - @claim:crypto-format uses AES-256-GCM, unique 96-bit IVs, and HMAC-SHA-256 references
+  ---
+  duration_ms: 6.299068
+  type: 'test'
+  ...
+# Subtest: @claim:allowlist only exact allowlisted pointers can spill
+ok 27 - @claim:allowlist only exact allowlisted pointers can spill
+  ---
+  duration_ms: 2.474187
+  type: 'test'
+  ...
+# Subtest: @claim:reference-integrity tampered references are rejected before retrieval
+ok 28 - @claim:reference-integrity tampered references are rejected before retrieval
+  ---
+  duration_ms: 3.690481
+  type: 'test'
+  ...
+# Subtest: @claim:post-decryption-integrity rejects plaintext whose digest no longer matches
+ok 29 - @claim:post-decryption-integrity rejects plaintext whose digest no longer matches
+  ---
+  duration_ms: 5.696371
+  type: 'test'
+  ...
+# Subtest: @claim:write-confirmation a failed multi-field spill rolls back objects already written
+ok 30 - @claim:write-confirmation a failed multi-field spill rolls back objects already written
+  ---
+  duration_ms: 3.533582
+  type: 'test'
+  ...
+# Subtest: @claim:retention retention reports expiry and reclaim excludes legal holds
+ok 31 - @claim:retention retention reports expiry and reclaim excludes legal holds
+  ---
+  duration_ms: 7.290963
+  type: 'test'
+  ...
+# Subtest: @claim:proxy-order proxy verifies untouched bytes before transforming and does not forward failures
+ok 32 - @claim:proxy-order proxy verifies untouched bytes before transforming and does not forward failures
+  ---
+  duration_ms: 97.065915
+  type: 'test'
+  ...
+# Subtest: @claim:audit-headers adds count and original digest without copying provider signatures
+ok 33 - @claim:audit-headers adds count and original digest without copying provider signatures
+  ---
+  duration_ms: 4.414478
+  type: 'test'
+  ...
+# Subtest: @claim:retrieval signed retrieval URL restores a value through the retrieval handler
+ok 34 - @claim:retrieval signed retrieval URL restores a value through the retrieval handler
+  ---
+  duration_ms: 14.519427
+  type: 'test'
+  ...
+# Subtest: S3-compatible adapter emits SigV4 requests and reads metadata
+ok 35 - S3-compatible adapter emits SigV4 requests and reads metadata
+  ---
+  duration_ms: 60.1004
+  type: 'test'
+  ...
+# Subtest: CommonJS entry point can be required
+ok 36 - CommonJS entry point can be required
+  ---
+  duration_ms: 10.919645
+  type: 'test'
+  ...
+# Subtest: @claim:reference-shape serializes every documented signed-reference field
+ok 37 - @claim:reference-shape serializes every documented signed-reference field
+  ---
+  duration_ms: 2.544987
+  type: 'test'
+  ...
+# Subtest: @claim:preview-redaction redacts tokens, data URIs, and long base64 without hiding ordinary text
+ok 38 - @claim:preview-redaction redacts tokens, data URIs, and long base64 without hiding ordinary text
+  ---
+  duration_ms: 4.522177
+  type: 'test'
+  ...
+# Subtest: @claim:key-handling never writes or logs host key material
+ok 39 - @claim:key-handling never writes or logs host key material
+  ---
+  duration_ms: 4.114279
+  type: 'test'
+  ...
+# Subtest: @claim:key-version preserves the configured version through verification and restore
+ok 40 - @claim:key-version preserves the configured version through verification and restore
+  ---
+  duration_ms: 68.257159
+  type: 'test'
+  ...
+1..40
+# tests 40
+# suites 0
+# pass 40
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 33842.932385
