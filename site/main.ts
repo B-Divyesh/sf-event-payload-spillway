@@ -51,36 +51,49 @@ const announceRoute = (): void => {
   const announcement = document.querySelector<HTMLElement>(".route-announcement");
   if (announcement) announcement.textContent = `${document.querySelector("h1")?.textContent ?? document.title} loaded`;
 };
-let activeRestoreId = "";
+let restoreGeneration = 0;
 const restoreRoutePositionAndFocus = (): void => {
   const { restoreFocus, restoreId, scroll } = historyState();
-  if (!restoreFocus || !restoreId || !scroll || activeRestoreId === restoreId) return;
+  if (!restoreFocus || !restoreId || !scroll) return;
   const target = document.querySelector<HTMLElement>(restoreFocus);
   if (!target) return;
-  activeRestoreId = restoreId;
-  document.documentElement.dataset.routeRestore = `pending:${restoreId}`;
+  const generation = ++restoreGeneration;
+  const transactionId = crypto.randomUUID();
+  document.documentElement.dataset.routeRestore = `pending:${restoreId}:${transactionId}`;
   document.documentElement.classList.add("is-restoring-route");
   target.focus({ preventScroll: true });
 
-  // A restoration is complete only after focus and the saved coordinates stay
-  // exact across consecutive paints. This avoids fixed delays and gives both
-  // pageshow and popstate one generation-scoped transaction to observe.
+  // Keep the saved coordinates authoritative until layout, focus, and any
+  // duplicate pageshow/popstate event have settled. A generation cancels an
+  // older transaction without suppressing a later revisit to the same entry.
   let stableFrames = 0;
   const settle = (): void => {
-    window.scrollTo(scroll.x, scroll.y);
+    if (generation !== restoreGeneration) return;
+    target.focus({ preventScroll: true });
+    window.scrollTo({ left: scroll.x, top: scroll.y, behavior: "instant" });
     requestAnimationFrame(() => {
+      if (generation !== restoreGeneration) return;
       const exact = window.scrollX === scroll.x && window.scrollY === scroll.y && document.activeElement === target;
       stableFrames = exact ? stableFrames + 1 : 0;
-      if (stableFrames < 3) { settle(); return; }
-      document.documentElement.dataset.routeRestore = `done:${restoreId}`;
+      if (stableFrames < 4) { settle(); return; }
+      document.documentElement.dataset.routeRestore = `done:${restoreId}:${transactionId}`;
       announceRoute();
       document.documentElement.classList.remove("is-restoring-route");
     });
   };
   requestAnimationFrame(settle);
 };
-window.addEventListener("pageshow", restoreRoutePositionAndFocus);
-window.addEventListener("popstate", restoreRoutePositionAndFocus);
+const focusRouteHeading = (): void => {
+  const heading = document.querySelector<HTMLElement>("h1");
+  heading?.focus({ preventScroll: true });
+  announceRoute();
+};
+const activateHistoryEntry = (): void => {
+  if (historyState().restoreId) restoreRoutePositionAndFocus();
+  else if (pageKind === "demo" || pageKind === "legal" || pageKind === "not-found") focusRouteHeading();
+};
+window.addEventListener("pageshow", activateHistoryEntry);
+window.addEventListener("popstate", activateHistoryEntry);
 
 const offline = document.querySelector<HTMLElement>("#offline");
 const updateNetwork = (): void => { if (offline) offline.hidden = navigator.onLine; };
@@ -165,9 +178,4 @@ if (form) {
   resetButton?.addEventListener("click", () => { resetDemo(); void runSpill(true); });
   restoreButton.addEventListener("click", async () => { if (!active) return; restoreButton.disabled = true; restoreStatus.textContent = "Decrypting and checking integrity…"; try { const restored = await active.spillway.restore(active.result.payload); const value = pointerInput.value.split("/").filter(Boolean).reduce<JsonValue | undefined>((current, key) => current && typeof current === "object" && !Array.isArray(current) ? current[key] : undefined, restored.payload); restoreStatus.textContent = `✓ Restored ${restored.restoredCount} field locally; recovered value is ${bytes(new TextEncoder().encode(JSON.stringify(value)).byteLength)}.`; } catch (error) { restoreStatus.textContent = error instanceof Error ? `Restore failed: ${error.message}` : "Restore failed. Run the sample again."; } finally { restoreButton.disabled = false; } });
   void loadSample().catch((error) => { setError(error instanceof Error ? error.message : "The sample image could not be loaded."); decisionLabel.textContent = "Error"; });
-}
-
-if (pageKind === "demo" || pageKind === "legal" || pageKind === "not-found") {
-  const heading = document.querySelector<HTMLElement>("h1");
-  if (!historyState().restoreId) window.setTimeout(() => { heading?.focus({ preventScroll: true }); announceRoute(); }, 0);
 }

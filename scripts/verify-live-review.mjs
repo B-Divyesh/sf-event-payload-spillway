@@ -43,10 +43,17 @@ try {
   await page.getByRole("button", { name: "Restore original" }).click(); await page.locator("#restore-status").getByText(/Restored 1 field/u).waitFor();
   assert.equal(await page.evaluate(() => localStorage.getItem("real:live-sentinel")), "keep"); assert.equal(await page.evaluate(() => sessionStorage.getItem("real:live-session")), "keep");
   if (evidence) await page.screenshot({ path: `${evidence}/live-demo-390.png`, fullPage: true });
-  await page.goBack({ waitUntil: "networkidle" }); await page.waitForFunction(() => { const id = history.state?.restoreId; return typeof id === "string" && document.activeElement?.id === "try-demo" && document.documentElement.dataset.routeRestore === `done:${id}`; }); assert.deepEqual(await page.evaluate(() => [history.state.scroll.y, scrollY]), [0, 0]);
+  let priorTransaction = null;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    await page.goBack({ waitUntil: "networkidle" });
+    await page.waitForFunction((previous) => { const id = history.state?.restoreId; const transaction = document.documentElement.dataset.routeRestore; return typeof id === "string" && document.activeElement?.id === "try-demo" && transaction?.startsWith(`done:${id}:`) && transaction !== previous; }, priorTransaction);
+    const restored = await page.evaluate(() => ({ savedY: history.state.scroll.y, actualY: scrollY, transaction: document.documentElement.dataset.routeRestore }));
+    assert.deepEqual([restored.savedY, restored.actualY], [0, 0]); priorTransaction = restored.transaction;
+    if (attempt < 4) { await page.goForward({ waitUntil: "networkidle" }); await page.waitForFunction(() => document.activeElement?.tagName === "H1"); }
+  }
   await assertPage("/privacy/", "Privacy — Event Payload Spillway"); await assertPage("/terms/", "Terms — Event Payload Spillway"); await assertPage("/missing-live-review", "Page not found — Event Payload Spillway");
   assert.equal(await page.locator("header nav a").count(), 4); assert.equal(await page.locator("footer nav a").count(), 3);
   const small = await page.locator("a:visible, button:visible").evaluateAll((nodes) => nodes.map((node) => { const box = node.getBoundingClientRect(); return { name: node.textContent?.trim(), width: box.width, height: box.height }; }).filter(({ width, height }) => width < 44 || height < 44)); assert.deepEqual(small, []);
   assert.equal(requests.every(({ url }) => new URL(url).origin === base.origin), true); assert.equal(requests.every(({ method, data }) => method === "GET" && !data.includes("live-private-marker-4821")), true); assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ url: base.origin, demoBytes: { raw, inline, ratio: inline / raw }, routes: 5, axeViolations: 0, consoleErrors: 0, overflow: false, smallTargets: 0, backFocus: "#try-demo", requests: requests.length }));
+  console.log(JSON.stringify({ url: base.origin, demoBytes: { raw, inline, ratio: inline / raw }, routes: 5, axeViolations: 0, consoleErrors: 0, overflow: false, smallTargets: 0, backRestorations: 5, backFocus: "#try-demo", requests: requests.length }));
 } finally { await context.close(); await browser.close(); }

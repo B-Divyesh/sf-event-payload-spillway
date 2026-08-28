@@ -20,8 +20,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-html.is-restoring-route { scroll-behavior: auto; }
+/* Keep history coordinates exact. Smooth behavior makes scrollTo() continue
+   after a route restoration has announced completion. */
+html { scroll-behavior: auto; }
+html.is-restoring-route { overflow-anchor: none; }
 body { margin: 0; min-width: 320px; background-color: var(--paper); background-image: radial-gradient(rgba(23,32,29,.09) .7px, transparent .7px); background-size: 5px 5px; }
 body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .14; background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(23,32,29,.08) 4px); mix-blend-mode: multiply; z-index: 10; }
 a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; }
@@ -207,6 +209,5 @@ footer p { color: var(--muted); font-size: .72rem; }
   .legal-page { width: min(100% - 28px, 820px); padding-block: 64px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

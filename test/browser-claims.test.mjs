@@ -177,24 +177,38 @@ test("@claim:site-routes every route has complete metadata and unknown paths ret
 test("route navigation restores the exact saved position, focus, and announcement repeatedly", async () => {
   const context = await browser.newContext(); const page = await context.newPage();
   await page.goto(origin, { waitUntil: "networkidle" });
-  let priorRestoreId = null;
-  for (let attempt = 1; attempt <= 8; attempt += 1) {
+  let priorTransaction = null;
+  let attempt = 0;
+  for (const savedY of [0, 137]) {
     await page.locator("#try-demo").focus();
-    await page.evaluate(() => window.scrollTo(0, 0));
-    assert.equal(await page.evaluate(() => scrollY), 0, `attempt ${attempt} starts at the top`);
+    await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), savedY);
+    assert.equal(await page.evaluate(() => scrollY), savedY, `the departure position must be exact`);
     await page.keyboard.press("Enter"); await page.waitForURL(`${origin}/demo`); await page.locator("h1").waitFor();
     await page.waitForFunction(() => document.activeElement?.tagName === "H1");
-    await page.goBack({ waitUntil: "networkidle" });
-    await page.waitForFunction(() => {
-      const id = history.state?.restoreId;
-      return typeof id === "string" && document.activeElement?.id === "try-demo" && document.documentElement.dataset.routeRestore === `done:${id}`;
-    });
-    const state = await page.evaluate(() => ({ restoreId: history.state?.restoreId, savedY: history.state?.scroll?.y, actualY: scrollY }));
-    assert.notEqual(state.restoreId, priorRestoreId, `attempt ${attempt} must complete a fresh restoration`);
-    assert.equal(state.savedY, 0, `attempt ${attempt} must not overwrite the activation position during pagehide`);
-    priorRestoreId = state.restoreId;
-    assert.equal(await page.evaluate(() => scrollY), 0, `attempt ${attempt}`);
-    assert.match(await page.locator(".route-announcement").innerText(), /Move oversized webhook fields/u);
+    for (let revisit = 0; revisit < 4; revisit += 1) {
+      attempt += 1;
+      await page.goBack({ waitUntil: "networkidle" });
+      try {
+        await page.waitForFunction((previous) => {
+          const id = history.state?.restoreId;
+          const transaction = document.documentElement.dataset.routeRestore;
+          return typeof id === "string" && document.activeElement?.id === "try-demo" && transaction?.startsWith(`done:${id}:`) && transaction !== previous;
+        }, priorTransaction, { timeout: 5_000 });
+      } catch (error) {
+        const diagnostic = await page.evaluate(() => ({ url: location.href, state: history.state, focus: document.activeElement?.id || document.activeElement?.tagName, transaction: document.documentElement.dataset.routeRestore, scrollY }));
+        throw new Error(`attempt ${attempt} did not complete restoration: ${JSON.stringify(diagnostic)}`, { cause: error });
+      }
+      const state = await page.evaluate(() => ({ restoreId: history.state?.restoreId, savedY: history.state?.scroll?.y, actualY: scrollY, transaction: document.documentElement.dataset.routeRestore }));
+      assert.equal(state.savedY, savedY, `attempt ${attempt} must retain the activation position`);
+      assert.equal(state.actualY, savedY, `attempt ${attempt} must restore the exact position`);
+      assert.notEqual(state.transaction, priorTransaction, `attempt ${attempt} must complete a fresh restoration transaction`);
+      priorTransaction = state.transaction;
+      assert.match(await page.locator(".route-announcement").innerText(), /Move oversized webhook fields/u);
+      if (revisit < 3) {
+        await page.goForward({ waitUntil: "networkidle" });
+        await page.waitForFunction(() => document.activeElement?.tagName === "H1" && document.querySelector(".route-announcement")?.textContent?.includes("See what stays"));
+      }
+    }
   }
   await context.close();
 });
@@ -206,9 +220,9 @@ test("demo keyboard order follows the visible result before the editor", async (
   for (const expectedId of ["stub-output", "restore-button", "payload", "pointer", "threshold", "spill-button"]) {
     await page.keyboard.press("Tab");
     assert.equal(await page.locator(":focus").getAttribute("id"), expectedId);
-    const box = await page.locator(":focus").boundingBox();
-    assert.ok(box, `${expectedId} should be visible`);
-    focused.push(box.y);
+    const position = await page.locator(":focus").evaluate((element) => ({ visible: Boolean(element.getClientRects().length), documentY: element.getBoundingClientRect().top + scrollY }));
+    assert.equal(position.visible, true, `${expectedId} should be visible`);
+    focused.push(position.documentY);
   }
   assert.deepEqual(focused, [...focused].sort((a, b) => a - b), "successive keyboard targets should not jump backward");
   await context.close();
