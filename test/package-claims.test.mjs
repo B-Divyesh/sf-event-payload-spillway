@@ -27,9 +27,14 @@ const restored = await spillway.restore(output.payload);
 if (restored.restoredCount !== 1 || restored.payload.result.attachment !== input.result.attachment) process.exit(1);
 `;
 
-test("@claim:package-formats packed ESM, CommonJS, declarations, and zero runtime dependencies work in a fresh consumer", () => {
+test("@claim:package-formats a source checkout builds an installable tarball with ESM, CommonJS, declarations, and zero runtime dependencies", () => {
   const { directory } = packedConsumer();
   try {
+    const readme = readFileSync("README.md", "utf8");
+    const home = readFileSync("dist/site/index.html", "utf8");
+    assert.match(readme, /not yet published to the npm registry/u);
+    assert.match(home, /Not yet published to npm/u);
+    assert.doesNotMatch(`${readme}${home}`, /npm install event-payload-spillway(?:\s|<)/u);
     writeFileSync(join(directory, "example.mjs"), example);
     execFileSync(process.execPath, ["example.mjs"], { cwd: directory, stdio: "pipe" });
     writeFileSync(join(directory, "commonjs.cjs"), 'const api = require("event-payload-spillway"); if (typeof api.Spillway !== "function") process.exit(1);\n');
@@ -41,6 +46,19 @@ test("@claim:package-formats packed ESM, CommonJS, declarations, and zero runtim
     assert.deepEqual(manifest.dependencies ?? {}, {});
     assert.ok(existsSync(join(directory, "node_modules/event-payload-spillway/dist/package/types/index.d.ts")));
   } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test("@claim:required-config landing copy names every required SpillwayConfig property", () => {
+  const declarations = readFileSync("dist/package/types/types.d.ts", "utf8");
+  const config = declarations.match(/export interface SpillwayConfig \{(?<body>[\s\S]*?)\n\}/u)?.groups?.body;
+  assert.ok(config, "SpillwayConfig must be present in the public declarations");
+  const required = [...config.matchAll(/^\s+(?<name>[A-Za-z][A-Za-z0-9]*)(?<optional>\?)?:/gmu)]
+    .filter((match) => !match.groups?.optional)
+    .map((match) => match.groups?.name);
+  assert.deepEqual(required, ["allowlist", "maxInlineBytes", "store", "encryptionKey", "signingKey", "expiresInMs"]);
+  const home = readFileSync("dist/site/index.html", "utf8");
+  assert.match(home, /Choose allowed fields, an inline limit, storage, encryption and signing keys, and a retention window\./u);
+  assert.doesNotMatch(home, /Configure four required options/u);
 });
 
 test("@claim:node20-runtime the packed README example runs on Node 20", { timeout: 120_000 }, () => {

@@ -36,7 +36,7 @@
           <p class="lede">For self-hosting developers whose webhook or automation events sometimes carry large base64, media, or JSON values. This is an npm library.</p>
           <div class="hero-actions">
             <a class="button primary" id="try-demo" href="/demo">Try it with sample data <span aria-hidden="true">→</span></a>
-            <button class="button secondary copy-install" type="button" data-copy="npm install event-payload-spillway">Copy install command</button>
+            <a class="button secondary copy-install" href="#install">Install from source</a>
           </div>
           <p class="action-note">Opens a seeded sample with the spill result already shown.</p>
           <ul class="proof-list" aria-label="Product properties">
@@ -122,9 +122,10 @@
 
       <section class="code-section section" id="install" aria-labelledby="install-title">
         <div class="code-copy">
-          <p class="eyebrow">API / v0.1.0</p>
-          <h2 id="install-title">Configure four required options</h2>
-          <p>Choose allowed fields, an inline limit, an object store, and a retention window.</p>
+          <p class="eyebrow">Source package / v0.1.0</p>
+          <h2 id="install-title">Configure the required options</h2>
+          <p>Choose allowed fields, an inline limit, storage, encryption and signing keys, and a retention window.</p>
+          <p>Not yet published to npm. Build its npm tarball from the source repository.</p>
           <ul class="check-list">
             <li>Typed ESM, CommonJS, and declarations</li>
             <li>No telemetry or runtime dependencies</li>
@@ -133,11 +134,15 @@
         </div>
         <div class="code-panel">
           <div class="code-tabs" role="tablist" aria-label="Code samples">
-            <button role="tab" aria-selected="true" aria-controls="code-install" id="tab-install" type="button">Install</button>
+            <button role="tab" aria-selected="true" aria-controls="code-install" id="tab-install" type="button">Install from source</button>
             <button role="tab" aria-selected="false" aria-controls="code-config" id="tab-config" type="button" tabindex="-1">Configure</button>
             <button role="tab" aria-selected="false" aria-controls="code-proxy" id="tab-proxy" type="button" tabindex="-1">Proxy</button>
           </div>
-          <div class="code-block" id="code-install" role="tabpanel" aria-labelledby="tab-install"><button class="copy-code" type="button" data-copy="npm install event-payload-spillway">Copy install command</button><pre><code>npm install event-payload-spillway</code></pre></div>
+          <div class="code-block" id="code-install" role="tabpanel" aria-labelledby="tab-install"><button class="copy-code" type="button" data-copy-target="source-install-code">Copy source install steps</button><pre tabindex="0" aria-label="Source install steps"><code id="source-install-code">git clone --depth 1 https://github.com/B-Divyesh/sf-event-payload-spillway.git spillway-src
+npm --prefix spillway-src ci
+npm --prefix spillway-src run build:lib
+npm pack ./spillway-src
+npm install ./event-payload-spillway-0.1.0.tgz</code></pre></div>
           <div class="code-block" id="code-config" role="tabpanel" aria-labelledby="tab-config" hidden><button class="copy-code" type="button" data-copy-target="config-code">Copy configuration</button><pre><code id="config-code">const spillway = new Spillway({
   allowlist: ["/result/attachment"],
   maxInlineBytes: 32_000,
@@ -173,7 +178,7 @@
       <section class="final-cta section" aria-labelledby="cta-title">
         <p class="eyebrow">npm library</p>
         <h2 id="cta-title">Keep large values out of database rows</h2>
-        <div><button class="button primary copy-install" type="button" data-copy="npm install event-payload-spillway">Copy install command</button><a class="button secondary" href="https://github.com/B-Divyesh/sf-event-payload-spillway" rel="external">Read the source <span class="external">(external)</span></a></div>
+        <div><a class="button primary" href="#install">Install from source</a><a class="button secondary" href="https://github.com/B-Divyesh/sf-event-payload-spillway" rel="external">Read the source <span class="external">(external)</span></a></div>
       </section>
     </main>
 

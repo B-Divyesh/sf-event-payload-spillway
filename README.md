@@ -8,10 +8,17 @@ The event keeps a signed reference with a redacted preview and expiry.
 It is for developers whose events sometimes contain base64, media, or large JSON values.
 It is not a queue, CDN, monitoring service, scanner, or legal-retention system.
 
-## Install
+## Install from source
+
+Version 0.1.0 is not yet published to the npm registry.
+Build its npm tarball from the source checkout.
 
 ```sh
-npm install event-payload-spillway
+git clone --depth 1 https://github.com/B-Divyesh/sf-event-payload-spillway.git spillway-src
+npm --prefix spillway-src ci
+npm --prefix spillway-src run build:lib
+npm pack ./spillway-src
+npm install ./event-payload-spillway-0.1.0.tgz
 ```
 
 The package ships ESM, CommonJS, and TypeScript declarations.
@@ -44,7 +51,8 @@ const restored = await spillway.restore(output.payload);
 console.log(restored.restoredCount); // 1
 ```
 
-Package tests install the tarball in a fresh project and run this example with ESM and Node 20.
+Package tests build and install the source tarball in a fresh project.
+They run this example with ESM and Node 20.
 They also compile the public declarations and load the CommonJS entry.
 
 ## S3-compatible storage

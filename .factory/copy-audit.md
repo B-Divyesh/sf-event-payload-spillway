@@ -1,4 +1,4 @@
-# Copy audit — polish 3
+# Copy audit — polish 4
 
 Counting uses whitespace-delimited words. Hyphenated terms and API names count as one. Code samples are excluded.
 
@@ -7,18 +7,19 @@ Counting uses whitespace-delimited words. Hyphenated terms and API names count a
 | Copy | Words | Result |
 | --- | ---: | --- |
 | Move oversized webhook fields out of your database | 8 | Headline, verb first |
-| For self-hosting developers whose webhook or automation events sometimes carry large base64, media, or JSON values. | 15 | Audience and situation |
+| For self-hosting developers whose webhook or automation events sometimes carry large base64, media, or JSON values. | 16 | Audience and situation |
 | This is an npm library. | 5 | Delivery form |
+| Try it with sample data | 5 | Primary action |
 | Opens a seeded sample with the spill result already shown. | 10 | Action result |
 | Demo data stays in this tab | 6 | Privacy fact |
 | Works offline after first visit | 5 | Offline fact |
 | Free and MIT licensed | 4 | Price/license fact |
 
-All seven items are visible before scrolling at 390×844. The first screen contains no banned word.
+All eight items are visible before scrolling at 390×844. The desktop secondary action says `Install from source`. The first screen contains no banned word.
 
 ## Catalog description
 
-“Move selected oversized webhook fields out of database rows into encrypted S3-compatible storage with an npm library.” is verb-first, 117 characters, and contains no banned word.
+“Move oversized webhook fields from database rows into encrypted S3-compatible storage with a typed npm library.” is verb-first, 111 characters, and contains no banned word.
 
 ## Landing sentences
 
@@ -37,7 +38,9 @@ All seven items are visible before scrolling at 390×844. The first screen conta
 | L11 | 6 | Only configured JSON Pointers are considered. | `allowlist` |
 | L12 | 9 | An AES-256-GCM envelope is written through an S3-compatible adapter. | `crypto-format`, `s3-compatibility` |
 | L13 | 10 | The reference records size, digest, field, redacted preview, and expiry. | `reference-shape` |
-| L14 | 13 | Choose allowed fields, an inline limit, an object store, and a retention window. | — |
+| L14 | 15 | Choose allowed fields, an inline limit, storage, encryption and signing keys, and a retention window. | `required-config` |
+| L14a | 5 | Not yet published to npm. | Honest availability notice |
+| L14b | 8 | Build its npm tarball from the source repository. | `package-formats` |
 | L15 | 9 | Count encrypted and expired bytes for the configured prefix. | `retention` |
 | L16 | 7 | Dry runs show expired candidates without deleting. | `retention` |
 | L17 | 8 | Reclaim excludes objects marked with a legal hold. | `retention` |
@@ -63,11 +66,11 @@ All seven items are visible before scrolling at 390×844. The first screen conta
 | L37 | 2 | Restore failed. | Error copy |
 | L38 | 4 | Run the sample again. | Error recovery |
 
-Landing prose totals 295 words across 38 sentences: 7.8 words per sentence. No sentence exceeds 22 words. No banned marketing word appears.
+Landing prose totals 310 words across 40 sentences: 7.8 words per sentence. No sentence exceeds 22 words. No banned marketing word appears.
 
 ## Headings, controls, and terminology
 
-All controls name their result: `Try it with sample data`, `Show spill result`, `Copy install command`, `Copy configuration`, `Copy proxy example`, `Restore original`, `Reset sample`, `Reset demo`, and `Leave demo`.
+All controls name their result: `Try it with sample data`, `Install from source`, `Show spill result`, `Copy source install steps`, `Copy configuration`, `Copy proxy example`, `Restore original`, `Reset sample`, `Reset demo`, and `Leave demo`.
 
 | Concept | Required term |
 | --- | --- |
@@ -77,11 +80,15 @@ All controls name their result: `Try it with sample data`, `Show spill result`, 
 | Object left in the event | Signed reference |
 | Object storage output | Encrypted object |
 | Configured field selector | JSON Pointer |
+| Distribution before registry publication | Source tarball |
 
 ## README wording recheck
 
 | Copy | Words | Result |
 | --- | ---: | --- |
-| Package tests install the tarball in a fresh project and run this example with ESM and Node 20. | 18 | Replaces internal test jargon; names the observable verification. |
+| Version 0.1.0 is not yet published to the npm registry. | 10 | States availability without implying a registry release. |
+| Build its npm tarball from the source checkout. | 8 | Gives the current installation path. |
+| Package tests build and install the source tarball in a fresh project. | 12 | Names the observable verification. |
+| They run this example with ESM and Node 20. | 9 | Names the runtime and module format. |
 
-There are no remaining wording flags from reviews 1, 2, or 3.
+There are no remaining wording flags from reviews 1, 2, 3, or 4.
