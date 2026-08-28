@@ -1,0 +1,5 @@
+
+> event-payload-spillway@0.1.0 verify:live-review
+> node scripts/verify-live-review.mjs https://event-payload-spillway.sociobot.in .factory/evidence
+
+{"url":"https://event-payload-spillway.sociobot.in","demoBytes":{"raw":74502,"inline":1268,"ratio":0.017019677324098682},"routes":5,"axeViolations":0,"consoleErrors":0,"overflow":false,"smallTargets":0,"backFocus":"#try-demo","requests":29}

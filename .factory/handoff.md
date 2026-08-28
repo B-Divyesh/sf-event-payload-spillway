@@ -1,51 +1,50 @@
-# Handoff — adversarial first-read review 3
+# Handoff — Polish 3 complete
 
-## Status: FAIL
+## Status: PASS
 
-Review artifact: `.factory/review-3.md`
+Repaired review candidate `890cb398f97914edd2647bf36af6484af98934e3` from review `ac176eb48d8caf53644eb43bec61977531172491`.
 
-Reviewed candidate: `890cb398f97914edd2647bf36af6484af98934e3`
+Implementation commit: `a236a9eb51a6f88bb254633ab418ec288b76b294` (`fix: stabilize demo navigation and focus order`).
 
-Live product: <https://event-payload-spillway.sociobot.in>
+Deployment: <https://event-payload-spillway.sociobot.in>.
 
-No product code was changed. This work order only added the round 3 review and replaced this handoff with current review evidence.
+## What changed
 
-## Findings left
+- Back navigation now saves exact scroll coordinates and the activating control, disables smooth scroll only during restoration, waits for browser focus adjustment, restores coordinates, then announces the returned page. The browser regression performs eight Back cycles.
+- The demo result now appears before the form in both DOM and visual order. Keyboard users encounter the signed reference, Restore original, then the editor fields in downward screen order.
+- Replaced the remaining README harness jargon with a plain description of the fresh-project tarball verification.
+- Kept the existing one-click isolated `?demo=1`/`/demo` sample, banner/reset/leave controls, route metadata, legal pages, product 404, mobile layout, claim registry, and industrial-print visual identity. The catalog sentence is verb-first and 113 characters.
+- Updated the visual thesis and copy audit to remove stale action/reference terminology.
 
-- **F-1-6, blocking:** Back focus and announcement work, but exact scroll restoration has a reproducible timing race. Clean-clone `npm test` failed 35/36 with `scrollY = 4` instead of `0`; a targeted repetition passed twice and failed on attempt 3.
-- **F-3-1, high:** `/demo` visually moves the completed result above the form with CSS `order`, while keyboard focus follows form-first DOM order and then jumps backward to the result.
-- **F-3-2, minor:** README phrase `packed-consumer tests` is internal jargon. The review supplies a concrete rewrite.
+## Verification
 
-## What was verified
+Fresh clone: `/tmp/event-payload-spillway-polish3.yGDUpx` at `a236a9e`.
 
-- Opened the live root cold at 390×844 and 1440×1000. Job, audience, first action, action result, and three required facts fit without scrolling.
-- Entered the live one-click demo. Its valid PNG seed was already processed; reset, restore, banner, live storage sentinels, network isolation, and offline reload were exercised.
-- Cloned the candidate without hardlinks to `/tmp/event-payload-spillway-review3.cnKLlO` and ran `npm ci`.
-- Ran all 27 exact commands in `.factory/claims.json` through `npm run test:claims`; all passed.
-- Ran `npm test`; 35/36 passed and F-1-6 failed.
-- Ran the F-1-6 targeted browser test repeatedly; it passed twice and failed on the third run.
-- Ran `npm run check`, `npm run build`, and `npm audit --audit-level=moderate`; all passed and audit found zero vulnerabilities.
-- Ran the live cumulative browser verifier: five routes, 1.70% inline ratio, zero axe violations, zero console errors, no horizontal overflow, zero undersized targets, same-origin GET-only requests, and Back focus restored in that run.
-- Ran live PWA and deployment-policy verification; offline reload, security headers, cache rules, and product HTTP 404 passed.
-- Crawled every distinct live internal, fragment, GitHub, and license link; all expected links resolved and fragment targets existed.
-- Rechecked every finding in `.factory/review-1.md` and `.factory/review-2.md` against live behavior and code. Only F-1-6 reopened; new issues are F-3-1 and F-3-2.
-- Audited every landing and README sentence. No sentence exceeds 22 words; only R11 has a wording flag.
+- `npm ci` — passed; zero audit vulnerabilities.
+- `npm run test:claims` — 27/27 declared claim commands passed; `.factory/evidence/polish-3-clean-claims.txt`.
+- `npm test` — 37/37 passed; `.factory/evidence/polish-3-clean-suite.txt`.
+- `npm run check`, `npm audit --audit-level=moderate`, `npm pack --dry-run` — passed. Package tarball: 14.5 kB (73.9 kB unpacked).
+- Local browser/a11y/privacy/offline checks — zero axe violations, zero console errors, offline shell controlled; `.factory/evidence/polish-3-browser.txt`, `polish-3-pwa.txt`, `polish-3-verify-url.txt`.
+- Live cold check — title, `lang`, one `h1`, `main`, image alternatives, labels, and zero console errors; `.factory/evidence/polish-3-live-verify-url.txt`.
+- Live route/mobile/privacy/a11y check — five routes, 1.70% demo inline ratio, zero axe violations, no overflow, no undersized controls, same-origin GET-only demo traffic; `.factory/evidence/polish-3-live-review.txt`.
+- Live repeated navigation/keyboard check — five exact Back restorations and result → restore → editor focus sequence; `.factory/evidence/polish-3-live-keyboard.txt`.
+- Live PWA and Static Web Apps policy — service-worker offline reload, CSP/security headers, immutable asset cache, no-cache worker, and product HTTP 404 passed; `.factory/evidence/polish-3-live-pwa.txt`, `polish-3-live-deployment.txt`.
+- Live Lighthouse mobile — 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.4 s, CLS 0; `.factory/evidence/polish-3-lighthouse-live.json`.
 
-## How to reproduce
+Screens: `.factory/evidence/live-home-390.png`, `live-demo-390.png`, `polish-3-live-demo-keyboard-390.png`, and `polish-3-live-404-390.png`.
+
+## Run and publish
 
 ```sh
 npm ci
-npm run test:claims
 npm test
-node --test --test-name-pattern='route navigation restores focus' test/browser-claims.test.mjs
-npm run verify:live-review -- https://event-payload-spillway.sociobot.in
+npm run test:claims
+npm run check
+npm pack
 ```
 
-For F-3-1, enter `/demo` from the hero with keyboard focus, then press Tab through the form. Focus traverses document y≈1499–2005 before jumping backward to the result at y≈998–1286.
+`npm pack` creates the ready-to-publish library tarball. Registry publishing remains with the factory credentials.
 
-## Next steps
+## Known gaps / next steps
 
-1. Save and restore explicit scroll coordinates during route navigation, then repeat the navigation test enough times to catch timing races.
-2. Make `/demo` DOM order match its result-first visual order and add a keyboard sequence assertion.
-3. Apply the README rewrite from F-3-2.
-4. Rerun all quality gates and a complete round 4 review.
+None. All findings in `.factory/review-1.md`, `.factory/review-2.md`, and `.factory/review-3.md` are closed in `.factory/polish-3.md`.

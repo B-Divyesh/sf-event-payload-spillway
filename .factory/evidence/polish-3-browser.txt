@@ -1,0 +1,5 @@
+
+> event-payload-spillway@0.1.0 verify:browser
+> node scripts/verify-browser.mjs http://127.0.0.1:4174
+
+{"axeViolations":0,"seriousCritical":0,"consoleErrors":0,"interactivePath":"spill → signed reference → restore","viewport":"390x844"}
