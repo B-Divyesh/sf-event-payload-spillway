@@ -1,0 +1,30 @@
+{
+  "fetchTime": "2026-08-28T12:38:13.264Z",
+  "finalUrl": "http://127.0.0.1:4174/",
+  "categories": {
+    "performance": {
+      "score": 100,
+      "title": "Performance"
+    },
+    "accessibility": {
+      "score": 100,
+      "title": "Accessibility"
+    },
+    "best-practices": {
+      "score": 100,
+      "title": "Best Practices"
+    },
+    "seo": {
+      "score": 100,
+      "title": "SEO"
+    }
+  },
+  "audits": {
+    "first_contentful_paint": "0.9 s",
+    "largest_contentful_paint": "1.6 s",
+    "total_blocking_time": "60 ms",
+    "cumulative_layout_shift": "0",
+    "speed_index": "0.9 s",
+    "total_byte_weight": "Total size was 116 KiB"
+  }
+}

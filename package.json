@@ -49,6 +49,7 @@
     "test": "npm run build && node --test test/*.test.mjs",
     "test:claims": "node scripts/verify-claims.mjs",
     "verify:browser": "node scripts/verify-browser.mjs",
+    "verify:live-review": "node scripts/verify-live-review.mjs",
     "verify:deployment": "node scripts/verify-deployment-policy.mjs",
     "verify:pwa": "node scripts/verify-pwa.mjs",
     "check": "tsc -p tsconfig.json --noEmit"

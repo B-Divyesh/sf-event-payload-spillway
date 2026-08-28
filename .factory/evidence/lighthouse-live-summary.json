@@ -1,0 +1,30 @@
+{
+  "fetchTime": "2026-08-28T12:42:53.999Z",
+  "finalUrl": "https://event-payload-spillway.sociobot.in/",
+  "categories": {
+    "performance": {
+      "score": 100,
+      "title": "Performance"
+    },
+    "accessibility": {
+      "score": 100,
+      "title": "Accessibility"
+    },
+    "best-practices": {
+      "score": 100,
+      "title": "Best Practices"
+    },
+    "seo": {
+      "score": 100,
+      "title": "SEO"
+    }
+  },
+  "audits": {
+    "first_contentful_paint": "0.9 s",
+    "largest_contentful_paint": "1.5 s",
+    "total_blocking_time": "40 ms",
+    "cumulative_layout_shift": "0",
+    "speed_index": "0.9 s",
+    "total_byte_weight": "Total size was 116 KiB"
+  }
+}
