@@ -43,7 +43,7 @@ try {
   await page.getByRole("button", { name: "Restore original" }).click(); await page.locator("#restore-status").getByText(/Restored 1 field/u).waitFor();
   assert.equal(await page.evaluate(() => localStorage.getItem("real:live-sentinel")), "keep"); assert.equal(await page.evaluate(() => sessionStorage.getItem("real:live-session")), "keep");
   if (evidence) await page.screenshot({ path: `${evidence}/live-demo-390.png`, fullPage: true });
-  await page.goBack({ waitUntil: "networkidle" }); await page.waitForFunction(() => document.activeElement?.id === "try-demo"); assert.equal(await page.evaluate(() => scrollY), 0);
+  await page.goBack({ waitUntil: "networkidle" }); await page.waitForFunction(() => document.activeElement?.id === "try-demo" && document.documentElement.dataset.routeRestore === "done"); assert.equal(await page.evaluate(() => scrollY), 0);
   await assertPage("/privacy/", "Privacy — Event Payload Spillway"); await assertPage("/terms/", "Terms — Event Payload Spillway"); await assertPage("/missing-live-review", "Page not found — Event Payload Spillway");
   assert.equal(await page.locator("header nav a").count(), 4); assert.equal(await page.locator("footer nav a").count(), 3);
   const small = await page.locator("a:visible, button:visible").evaluateAll((nodes) => nodes.map((node) => { const box = node.getBoundingClientRect(); return { name: node.textContent?.trim(), width: box.width, height: box.height }; }).filter(({ width, height }) => width < 44 || height < 44)); assert.deepEqual(small, []);

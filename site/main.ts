@@ -4,24 +4,59 @@ import "./style.css";
 const pageKind = document.body.dataset.page;
 if (pageKind === "home" && new URLSearchParams(location.search).get("demo") === "1") location.replace("/demo");
 
-history.scrollRestoration = "auto";
+type NavigationState = {
+  restoreFocus?: string;
+  scroll?: { x: number; y: number };
+};
+
+// The browser's automatic restoration can race layout and focus when returning
+// from the completed demo. Record the exact departure point ourselves and
+// restore it before returning focus to the link that opened the route.
+history.scrollRestoration = "manual";
+const historyState = (): NavigationState => {
+  const state = history.state;
+  return state && typeof state === "object" ? state as NavigationState : {};
+};
+const saveScrollPosition = (): void => {
+  history.replaceState({ ...historyState(), scroll: { x: window.scrollX, y: window.scrollY } }, "");
+};
 document.addEventListener("click", (event) => {
   const link = (event.target as Element | null)?.closest<HTMLAnchorElement>("a[href]");
   if (!link || link.origin !== location.origin || link.target || link.hasAttribute("download")) return;
   if (!link.id) link.id = `route-link-${crypto.randomUUID()}`;
-  history.replaceState({ ...(history.state as object | null), restoreFocus: `#${CSS.escape(link.id)}` }, "");
+  history.replaceState({ ...historyState(), restoreFocus: `#${CSS.escape(link.id)}`, scroll: { x: window.scrollX, y: window.scrollY } }, "");
 });
-const restoreRouteFocus = (): void => {
-  const selector = (history.state as { restoreFocus?: string } | null)?.restoreFocus;
-  if (!selector) return;
-  const target = document.querySelector<HTMLElement>(selector);
-  if (!target) return;
-  target.focus({ preventScroll: true });
+window.addEventListener("pagehide", saveScrollPosition);
+
+const announceRoute = (): void => {
   const announcement = document.querySelector<HTMLElement>(".route-announcement");
   if (announcement) announcement.textContent = `${document.querySelector("h1")?.textContent ?? document.title} loaded`;
 };
-window.addEventListener("pageshow", restoreRouteFocus);
-window.setTimeout(restoreRouteFocus, 0);
+const restoreRoutePositionAndFocus = (): void => {
+  const { restoreFocus, scroll } = historyState();
+  if (!restoreFocus || !scroll) return;
+  const target = document.querySelector<HTMLElement>(restoreFocus);
+  if (!target) return;
+  // Let history traversal and layout finish first. In Chromium, their final
+  // adjustment can arrive after pageshow; restoring only on the next frame
+  // leaves a small, observable offset on a fast back navigation.
+  document.documentElement.dataset.routeRestore = "pending";
+  document.documentElement.classList.add("is-restoring-route");
+  window.setTimeout(() => requestAnimationFrame(() => {
+      target.focus({ preventScroll: true });
+      // Chromium can defer the focus adjustment by one paint. Make the saved
+      // coordinate authoritative only after that adjustment, then expose a
+      // completed transaction for keyboard and browser tests to wait on.
+      window.setTimeout(() => requestAnimationFrame(() => {
+        window.scrollTo(scroll.x, scroll.y);
+        document.documentElement.dataset.routeRestore = "done";
+        announceRoute();
+        requestAnimationFrame(() => document.documentElement.classList.remove("is-restoring-route"));
+      }), 100);
+  }), 120);
+};
+window.addEventListener("pageshow", restoreRoutePositionAndFocus);
+window.addEventListener("popstate", restoreRoutePositionAndFocus);
 
 const offline = document.querySelector<HTMLElement>("#offline");
 const updateNetwork = (): void => { if (offline) offline.hidden = navigator.onLine; };
@@ -110,6 +145,5 @@ if (form) {
 
 if (pageKind === "demo" || pageKind === "legal" || pageKind === "not-found") {
   const heading = document.querySelector<HTMLElement>("h1");
-  const announcement = document.querySelector<HTMLElement>(".route-announcement") ?? (() => { const node = document.createElement("div"); node.className = "route-announcement"; node.setAttribute("aria-live", "polite"); node.setAttribute("aria-atomic", "true"); document.body.append(node); return node; })();
-  window.setTimeout(() => { heading?.focus(); if (announcement && heading) announcement.textContent = `${heading.textContent} loaded`; }, 0);
+  window.setTimeout(() => { heading?.focus({ preventScroll: true }); announceRoute(); }, 0);
 }

@@ -174,10 +174,34 @@ test("@claim:site-routes every route has complete metadata and unknown paths ret
   await context.close();
 });
 
-test("route navigation restores focus and announces the returned page", async () => {
+test("route navigation restores the exact saved position, focus, and announcement repeatedly", async () => {
   const context = await browser.newContext(); const page = await context.newPage();
-  await page.goto(origin, { waitUntil: "networkidle" }); await page.locator("#try-demo").focus(); await page.keyboard.press("Enter"); await page.waitForURL(`${origin}/demo`); await page.locator("h1").waitFor(); assert.equal(await page.evaluate(() => document.activeElement?.tagName), "H1");
-  await page.goBack({ waitUntil: "networkidle" }); await page.waitForFunction(() => document.activeElement?.id === "try-demo"); assert.equal(await page.evaluate(() => scrollY), 0); assert.match(await page.locator(".route-announcement").innerText(), /Move oversized webhook fields/u);
+  await page.goto(origin, { waitUntil: "networkidle" });
+  for (let attempt = 1; attempt <= 8; attempt += 1) {
+    await page.locator("#try-demo").focus();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    assert.equal(await page.evaluate(() => scrollY), 0, `attempt ${attempt} starts at the top`);
+    await page.keyboard.press("Enter"); await page.waitForURL(`${origin}/demo`); await page.locator("h1").waitFor();
+    await page.waitForFunction(() => document.activeElement?.tagName === "H1");
+    await page.goBack({ waitUntil: "networkidle" }); await page.waitForFunction(() => document.activeElement?.id === "try-demo" && document.documentElement.dataset.routeRestore === "done");
+    assert.equal(await page.evaluate(() => scrollY), 0, `attempt ${attempt}`);
+    assert.match(await page.locator(".route-announcement").innerText(), /Move oversized webhook fields/u);
+  }
+  await context.close();
+});
+
+test("demo keyboard order follows the visible result before the editor", async () => {
+  const { context, page } = await demoPage();
+  await page.locator("h1").focus();
+  const focused = [];
+  for (const expectedId of ["stub-output", "restore-button", "payload", "pointer", "threshold", "spill-button"]) {
+    await page.keyboard.press("Tab");
+    assert.equal(await page.locator(":focus").getAttribute("id"), expectedId);
+    const box = await page.locator(":focus").boundingBox();
+    assert.ok(box, `${expectedId} should be visible`);
+    focused.push(box.y);
+  }
+  assert.deepEqual(focused, [...focused].sort((a, b) => a - b), "successive keyboard targets should not jump backward");
   await context.close();
 });
 

@@ -44,7 +44,7 @@ const restored = await spillway.restore(output.payload);
 console.log(restored.restoredCount); // 1
 ```
 
-The packed-consumer tests run this example through ESM and Node 20.
+Package tests install the tarball in a fresh project and run this example with ESM and Node 20.
 They also compile the public declarations and load the CommonJS entry.
 
 ## S3-compatible storage

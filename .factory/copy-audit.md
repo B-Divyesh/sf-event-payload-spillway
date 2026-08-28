@@ -1,4 +1,4 @@
-# Copy audit — polish 2
+# Copy audit — polish 3
 
 Counting uses whitespace-delimited words. Hyphenated terms and API names count as one. Code samples are excluded.
 
@@ -74,4 +74,10 @@ All controls name their result: `Try it with sample data`, `Show spill result`, 
 | Object storage output | Encrypted object |
 | Configured field selector | JSON Pointer |
 
-There are no remaining wording flags from reviews 1 or 2.
+## README wording recheck
+
+| Copy | Words | Result |
+| --- | ---: | --- |
+| Package tests install the tarball in a fresh project and run this example with ESM and Node 20. | 18 | Replaces internal test jargon; names the observable verification. |
+
+There are no remaining wording flags from reviews 1, 2, or 3.

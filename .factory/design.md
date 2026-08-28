@@ -32,7 +32,7 @@ This is intentionally a single, ink-on-stock light treatment. The warm paper bac
 
 ## Interaction grammar
 
-- The main call to action is “Test a payload.” The demo follows a three-stage ledger: input → spill decision → signed stub/restore.
+- The main call to action is “Try it with sample data.” The demo follows a three-stage ledger: input → spill decision → signed reference/restore.
 - Pressing controls moves them 2px into their offset shadow. Focus uses a 3px brass outline plus 3px paper gap.
 - Status changes combine a symbol, plain-language label, and measurement. Spill results enter from the left as though advanced by a line printer; tabs expose appropriate ARIA state and arrow-key behavior.
 

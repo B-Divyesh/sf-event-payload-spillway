@@ -35,7 +35,7 @@ try {
   await page.locator("#payload-error").getByText(/not valid JSON/u).waitFor();
   assert.equal(await page.locator("#payload").getAttribute("aria-invalid"), "true");
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ axeViolations: axe.violations.length, seriousCritical: serious.length, consoleErrors: errors.length, interactivePath: "spill → signed stub → restore", viewport: "390x844" }));
+  console.log(JSON.stringify({ axeViolations: axe.violations.length, seriousCritical: serious.length, consoleErrors: errors.length, interactivePath: "spill → signed reference → restore", viewport: "390x844" }));
 } finally {
   await context.close();
   await browser.close();
