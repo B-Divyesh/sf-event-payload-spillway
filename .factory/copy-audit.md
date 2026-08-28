@@ -16,6 +16,10 @@ Counting uses whitespace-delimited words. Hyphenated terms and API names count a
 
 All seven items are visible before scrolling at 390×844. The first screen contains no banned word.
 
+## Catalog description
+
+“Move selected oversized webhook fields out of database rows into encrypted S3-compatible storage with an npm library.” is verb-first, 117 characters, and contains no banned word.
+
 ## Landing sentences
 
 | ID | Words | Sentence | Claim evidence, if applicable |

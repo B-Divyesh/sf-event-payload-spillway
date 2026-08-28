@@ -1,19 +1,19 @@
 # Polish 3 — cumulative finding closure
 
-Repaired candidate `890cb398f97914edd2647bf36af6484af98934e3` from review commit `ac176eb48d8caf53644eb43bec61977531172491`.
+Repaired candidate `22aaba426c9feafaee07e8ee5928c44bf242610d` from review commit `ac176eb48d8caf53644eb43bec61977531172491`.
 
-Implementation commit: `a236a9eb51a6f88bb254633ab418ec288b76b294`.
+Implementation commits: `f30ff56` and `2f92b89`.
 
-Deployed URL: <https://event-payload-spillway.sociobot.in> (live JavaScript: `main-okivMUPd.js`).
+Deployed URL: <https://event-payload-spillway.sociobot.in> (deployment `fa443a30-1df3-4371-aa6e-bf3e8561602d`; live JavaScript `main-DyWkfyt1.js`).
 
 ## Evidence key
 
-- **C** — every declared `@claim:*` command passed from the clean clone: `.factory/evidence/polish-3-clean-claims.txt` (27/27).
-- **U** — clean-clone aggregate suite: `.factory/evidence/polish-3-clean-suite.txt` (37/37).
-- **L** — live five-route review: `.factory/evidence/polish-3-live-review.txt`; this recorded 1.70% inline ratio, zero axe violations, zero console errors, no 390px overflow, and no undersized targets.
-- **K** — repeated live navigation and keyboard check: `.factory/evidence/polish-3-live-keyboard.txt` (five exact Back restorations; result → restore → editor order).
-- **V** — cold live baseline: `.factory/evidence/polish-3-live-verify-url.txt`; live PWA and header/404 policy: `.factory/evidence/polish-3-live-pwa.txt`, `.factory/evidence/polish-3-live-deployment.txt`.
-- **Screens** — home `.factory/evidence/live-home-390.png`; demo `.factory/evidence/live-demo-390.png`; keyboard demo `.factory/evidence/polish-3-live-demo-keyboard-390.png`; 404 `.factory/evidence/polish-3-live-404-390.png`.
+- **C** — every declared `@claim:*` command passed from the exact final clean clone: `.factory/evidence/polish-3-retry2-final-clean-claims.txt` (27/27).
+- **U** — exact final clean-clone aggregate suite: `.factory/evidence/polish-3-retry2-final-clean-suite.txt` (37/37).
+- **L** — post-deploy cold five-route review: `.factory/evidence/polish-3-retry2-live/review.txt`; this records a 1.70% inline ratio, zero axe violations, zero console errors, no 390 px overflow, no undersized targets, and the direct `?demo=1` route.
+- **K** — the aggregate regression performs eight exact Back restorations at positions `0` and `137`; the live review performs six more same-entry Back restorations and verifies result → restore → editor keyboard order.
+- **V** — cold live baseline: `.factory/evidence/polish-3-retry2-live/verify-url.txt`; live PWA and header/404 policy: `.factory/evidence/polish-3-retry2-live/pwa.txt`, `.factory/evidence/polish-3-retry2-live/deployment.txt`.
+- **Screens** — home `.factory/evidence/polish-3-retry2-live/live-home-390.png`; demo `.factory/evidence/polish-3-retry2-live/live-demo-390.png`; keyboard demo `.factory/evidence/polish-3-retry2-live/demo-keyboard-390.png`; 404 `.factory/evidence/polish-3-retry2-live/404-390.png`.
 
 All URL checks below are cold checks against the deployed URL unless a route is shown.
 
@@ -26,7 +26,7 @@ All URL checks below are cold checks against the deployed URL unless a route is 
 | F-1-3 | Kept the isolated memory-only demo, persistent banner, Reset demo, and Leave demo controls. | `@claim:demo-seed`, `@claim:demo-privacy` (C); `/demo`; demo screen. |
 | F-1-4 | Retained the 27-entry registry with exactly one tagged observable test per claim. | registry audit plus 27/27 clean commands (C). |
 | F-1-5 | Kept the real demo route and product-styled Static Web Apps 404. | `@claim:site-routes`, `@claim:deployment-policy` (C); `/demo`, `/definitely-missing-polish-3`; 404 screen. |
-| F-1-6 | Replaced timing-dependent browser restoration with saved x/y coordinates, manual history restoration, a completed route transaction, and post-adjustment focus/announcement. The test now performs eight Back cycles. | `route navigation restores the exact saved position, focus, and announcement repeatedly` (U); K; `/` ↔ `/demo`. |
+| F-1-6 | Removed global smooth-scroll timing and the reused-entry state leak. Every traversal now creates a fresh restoration transaction, cancels only an in-flight duplicate, refocuses the saved control, restores exact coordinates over stable frames, and announces the route. | `route navigation restores the exact saved position, focus, and announcement repeatedly` (U): eight same-entry cycles at `0` and `137`; 80/80 stress restorations; K; `/` ↔ `/demo`. |
 | F-1-12 | Uses measurable database-row wording instead of incident/hot-path language. | `@claim:inline-reduction` (C); `/demo`; demo screen. |
 | F-1-13 | Keeps encryption and S3-compatible wording within independently tested library behavior. | `@claim:crypto-format`, `@claim:s3-compatibility` (C); `/`, README. |
 | F-1-14 | Uses signed-reference wording and tests retrieval without a click-count promise. | `@claim:retrieval`, `@claim:reference-shape` (C); `/demo`. |
@@ -100,15 +100,15 @@ All URL checks below are cold checks against the deployed URL unless a route is 
 
 | Finding | Change made | Evidence |
 | --- | --- | --- |
-| F-1-6 | Fully closed the remaining history timing race with explicit coordinates, manual restoration, a settled focus transaction, and an eight-cycle regression test. | U; K; `/` ↔ `/demo`. |
-| F-3-1 | Moved the completed result before the editor in demo DOM order and removed CSS reordering; keyboard focus now flows downward through result, restore, then form fields. | `demo keyboard order follows the visible result before the editor` (U); K; `/demo`; keyboard demo screen. |
+| F-1-6 | Fully closed the remaining history timing race and repeated-entry leak with exact coordinates, a fresh per-traversal transaction, four stable frames, and Back/Forward focus plus announcement checks. | U; K records six live restorations at `0` and `137`; `/` ↔ `/demo`. |
+| F-3-1 | Moved the completed result before the editor in demo DOM order and removed CSS reordering. The regression compares document coordinates, so viewport scroll cannot hide an order mismatch or cause a false failure. | `demo keyboard order follows the visible result before the editor` (U); K; `/demo`; keyboard demo screen. |
 | F-3-2 | Rewrote the README sentence as “Package tests install the tarball in a fresh project and run this example with ESM and Node 20.” | `.factory/copy-audit.md`; `@claim:package-formats`, `@claim:node20-runtime` (C); README. |
 
 ## Final verification
 
-- Clean clone at `a236a9e`: `npm ci`, all 27 exact claim commands, `npm test` (37/37), `npm run check`, `npm audit --audit-level=moderate`, and `npm pack --dry-run` passed.
-- Local browser, offline, and basic URL verification passed; see `polish-3-browser.txt`, `polish-3-pwa.txt`, and `polish-3-verify-url.txt` in `.factory/evidence/`.
-- Live checks passed after deployment: cold URL baseline, all routes/metadata/a11y/privacy/mobile checks, five repeated Back restorations, PWA offline reload, security/cache policy, and product 404.
-- Live Lighthouse mobile scores: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.4 s and CLS 0. See `.factory/evidence/polish-3-lighthouse-live.json`.
+- Exact final clean clone at `2f92b89`: `npm ci`, all 27 claim commands, `npm test` (37/37), `npm run check`, `npm audit --audit-level=moderate`, and `npm pack --dry-run` passed. See `.factory/evidence/polish-3-retry2-final-clean-*`.
+- Ten additional fresh regression runs passed all 80 exact Back restorations.
+- Live checks passed after deployment: cold URL baseline, all routes/metadata/a11y/privacy/mobile checks, six repeated Back restorations, direct `?demo=1`, PWA offline reload, security/cache policy, product 404, and link status.
+- Live Lighthouse mobile scores: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.4 s, TBT 0 ms, CLS 0, and 116 KiB transfer. See `.factory/evidence/polish-3-retry2-live/lighthouse.json`.
 
 No finding from reviews 1, 2, or 3 remains open.

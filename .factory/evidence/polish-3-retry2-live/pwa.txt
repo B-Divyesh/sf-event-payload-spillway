@@ -1,0 +1,5 @@
+
+> event-payload-spillway@0.1.0 verify:pwa
+> node scripts/verify-pwa.mjs https://event-payload-spillway.sociobot.in
+
+{"serviceWorkerController":true,"offlineShell":true,"consoleErrors":0,"url":"https://event-payload-spillway.sociobot.in"}

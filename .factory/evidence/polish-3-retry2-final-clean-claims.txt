@@ -1,0 +1,1491 @@
+
+> event-payload-spillway@0.1.0 test:claims
+> node scripts/verify-claims.mjs
+
+
+[claim inline-reduction] The exact shipped demo keeps its database row below 10% of the original event size.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 257ms
+TAP version 13
+# Subtest: @claim:inline-reduction the exact shipped demo keeps the database row below 10%
+ok 1 - @claim:inline-reduction the exact shipped demo keeps the database row below 10%
+  ---
+  duration_ms: 1131.56773
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1755.404374
+
+[claim demo-media] The shipped demo attachment is a valid PNG with matching metadata.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 234ms
+TAP version 13
+# Subtest: @claim:demo-media the shipped attachment is a valid PNG with matching metadata
+ok 1 - @claim:demo-media the shipped attachment is a valid PNG with matching metadata
+  ---
+  duration_ms: 1133.647833
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1712.916716
+
+[claim crypto-format] Values use AES-256-GCM with unique random 96-bit IVs, and references use HMAC-SHA-256.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 244ms
+TAP version 13
+# Subtest: @claim:crypto-format uses AES-256-GCM, unique 96-bit IVs, and HMAC-SHA-256 references
+ok 1 - @claim:crypto-format uses AES-256-GCM, unique 96-bit IVs, and HMAC-SHA-256 references
+  ---
+  duration_ms: 30.526841
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 120.203363
+
+[claim allowlist] Only exact allowed JSON Pointers can spill.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 254ms
+TAP version 13
+# Subtest: @claim:allowlist only exact allowlisted pointers can spill
+ok 1 - @claim:allowlist only exact allowlisted pointers can spill
+  ---
+  duration_ms: 14.78812
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 110.43485
+
+[claim reference-integrity] Tampered signed references are rejected before storage reads.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 257ms
+TAP version 13
+# Subtest: @claim:reference-integrity tampered references are rejected before retrieval
+ok 1 - @claim:reference-integrity tampered references are rejected before retrieval
+  ---
+  duration_ms: 28.513739
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 121.525765
+
+[claim post-decryption-integrity] Plaintext integrity is checked after decryption.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 258ms
+TAP version 13
+# Subtest: @claim:post-decryption-integrity rejects plaintext whose digest no longer matches
+ok 1 - @claim:post-decryption-integrity rejects plaintext whose digest no longer matches
+  ---
+  duration_ms: 33.859846
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 123.784468
+
+[claim write-confirmation] A failed multi-field write removes objects already written.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 254ms
+TAP version 13
+# Subtest: @claim:write-confirmation a failed multi-field spill rolls back objects already written
+ok 1 - @claim:write-confirmation a failed multi-field spill rolls back objects already written
+  ---
+  duration_ms: 31.621243
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 119.612361
+
+[claim retention] Retention reports scoped encrypted and expired bytes; dry runs do not delete; legal holds stay excluded.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 263ms
+TAP version 13
+# Subtest: @claim:retention retention reports expiry and reclaim excludes legal holds
+ok 1 - @claim:retention retention reports expiry and reclaim excludes legal holds
+  ---
+  duration_ms: 33.102145
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 123.529267
+
+[claim proxy-order] The proxy verifies untouched bytes and does not forward invalid signatures, content types, JSON, or failed spills.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 270ms
+TAP version 13
+# Subtest: @claim:proxy-order proxy verifies untouched bytes before transforming and does not forward failures
+ok 1 - @claim:proxy-order proxy verifies untouched bytes before transforming and does not forward failures
+  ---
+  duration_ms: 76.378903
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 168.732428
+
+[claim audit-headers] Forwarded requests include spill count and original digest headers without copying provider signature values into them.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 243ms
+TAP version 13
+# Subtest: @claim:audit-headers adds count and original digest without copying provider signatures
+ok 1 - @claim:audit-headers adds count and original digest without copying provider signatures
+  ---
+  duration_ms: 75.590792
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 173.506141
+
+[claim retrieval] A signed retrieval URL restores the value with Cache-Control: no-store.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 238ms
+TAP version 13
+# Subtest: @claim:retrieval signed retrieval URL restores a value through the retrieval handler
+ok 1 - @claim:retrieval signed retrieval URL restores a value through the retrieval handler
+  ---
+  duration_ms: 69.260076
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 159.945406
+
+[claim reference-shape] A reference records size, digest, field, redacted preview, expiry, key version, and an optional retrieval URL.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 253ms
+TAP version 13
+# Subtest: @claim:reference-shape serializes every documented signed-reference field
+ok 1 - @claim:reference-shape serializes every documented signed-reference field
+  ---
+  duration_ms: 28.314872
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 116.424796
+
+[claim preview-redaction] Previews redact likely tokens, data URIs, and long base64 while preserving ordinary short text.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 239ms
+TAP version 13
+# Subtest: @claim:preview-redaction redacts tokens, data URIs, and long base64 without hiding ordinary text
+ok 1 - @claim:preview-redaction redacts tokens, data URIs, and long base64 without hiding ordinary text
+  ---
+  duration_ms: 29.821975
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 116.344695
+
+[claim key-handling] Host encryption and signing keys are never written to the spill store or logs.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 259ms
+TAP version 13
+# Subtest: @claim:key-handling never writes or logs host key material
+ok 1 - @claim:key-handling never writes or logs host key material
+  ---
+  duration_ms: 28.595673
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 115.029592
+
+[claim key-version] References preserve the configured key version through verification and restore.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 237ms
+TAP version 13
+# Subtest: @claim:key-version preserves the configured version through verification and restore
+ok 1 - @claim:key-version preserves the configured version through verification and restore
+  ---
+  duration_ms: 31.024279
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118.835002
+
+[claim s3-compatibility] The adapter completes encrypted put, list, head, get, restore, and delete against MinIO.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 244ms
+TAP version 13
+# Subtest: @claim:s3-compatibility completes encrypted put, list, head, get, restore, and delete against MinIO
+ok 1 - @claim:s3-compatibility completes encrypted put, list, head, get, restore, and delete against MinIO
+  ---
+  duration_ms: 821.560886
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 926.461651
+
+[claim package-formats] The packed package provides working ESM, CommonJS, and declarations with zero runtime dependencies.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 255ms
+TAP version 13
+# Subtest: @claim:package-formats packed ESM, CommonJS, declarations, and zero runtime dependencies work in a fresh consumer
+ok 1 - @claim:package-formats packed ESM, CommonJS, declarations, and zero runtime dependencies work in a fresh consumer
+  ---
+  duration_ms: 2467.073963
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2561.775803
+
+[claim node20-runtime] The documented library example runs on Node 20.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 260ms
+TAP version 13
+# Subtest: @claim:node20-runtime the packed README example runs on Node 20
+ok 1 - @claim:node20-runtime the packed README example runs on Node 20
+  ---
+  duration_ms: 1815.184307
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1899.02572
+
+[claim build-artifacts] The build emits ESM, CommonJS, declarations, and the static site.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 248ms
+TAP version 13
+# Subtest: @claim:build-artifacts build emits ESM, CommonJS, declarations, and the static site
+ok 1 - @claim:build-artifacts build emits ESM, CommonJS, declarations, and the static site
+  ---
+  duration_ms: 0.834702
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 83.737913
+
+[claim license-price] The package and browser demo are free to use under the MIT license, with no paid gate.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 243ms
+TAP version 13
+# Subtest: @claim:license-price the package is MIT licensed and the demo has no paid gate
+ok 1 - @claim:license-price the package is MIT licensed and the demo has no paid gate
+  ---
+  duration_ms: 2.061005
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 95.636543
+
+[claim demo-seed] The demo opens with a completed sample, and Reset demo restores and reruns it.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 269ms
+TAP version 13
+# Subtest: @claim:demo-seed /demo opens with a completed sample and Reset demo restores it
+ok 1 - @claim:demo-seed /demo opens with a completed sample and Reset demo restores it
+  ---
+  duration_ms: 1187.160913
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1770.665695
+
+[claim demo-privacy] Demo payloads stay in temporary browser memory and are not uploaded or persisted in browser storage.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 242ms
+TAP version 13
+# Subtest: @claim:demo-privacy demo isolates every browser store and never persists or uploads edited payloads
+ok 1 - @claim:demo-privacy demo isolates every browser store and never persists or uploads edited payloads
+  ---
+  duration_ms: 2204.947598
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2737.60175
+
+[claim no-telemetry] The site and npm library emit no telemetry.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 262ms
+TAP version 13
+# Subtest: @claim:no-telemetry site and library execution emit no analytics, beacons, sockets, or logs
+ok 1 - @claim:no-telemetry site and library execution emit no analytics, beacons, sockets, or logs
+  ---
+  duration_ms: 1270.073924
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1849.063794
+
+[claim demo-route] Opening ?demo=1 enters the isolated seeded demo.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 258ms
+TAP version 13
+# Subtest: @claim:demo-route ?demo=1 enters the isolated seeded demo
+ok 1 - @claim:demo-route ?demo=1 enters the isolated seeded demo
+  ---
+  duration_ms: 1300.753802
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1914.45216
+
+[claim offline-demo] The warmed demo reloads offline and restores its sample.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 264ms
+TAP version 13
+# Subtest: @claim:offline-demo warmed demo reloads offline and restores the sample
+ok 1 - @claim:offline-demo warmed demo reloads offline and restores the sample
+  ---
+  duration_ms: 2143.339341
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2710.949482
+
+[claim site-routes] Each route has its own complete metadata and shared shell; unknown paths return the product 404.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 252ms
+TAP version 13
+# Subtest: @claim:site-routes every route has complete metadata and unknown paths return the shared product 404
+ok 1 - @claim:site-routes every route has complete metadata and unknown paths return the shared product 404
+  ---
+  duration_ms: 3589.861513
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4170.354487
+
+[claim deployment-policy] The static deployment emits security/cache policy and routes unknown paths to the product 404.
+
+> event-payload-spillway@0.1.0 build
+> npm run build:lib && npm run build:site
+
+
+> event-payload-spillway@0.1.0 build:lib
+> rm -rf dist/package && npm run build:esm && npm run build:cjs && npm run build:types
+
+
+> event-payload-spillway@0.1.0 build:esm
+> tsc -p tsconfig.esm.json
+
+
+> event-payload-spillway@0.1.0 build:cjs
+> tsc -p tsconfig.cjs.json && node scripts/cjs-package.mjs
+
+
+> event-payload-spillway@0.1.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> event-payload-spillway@0.1.0 build:site
+> vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 14 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/site/404.html                   2.88 kB │ gzip: 1.10 kB
+../dist/site/terms/index.html           3.69 kB │ gzip: 1.50 kB
+../dist/site/privacy/index.html         3.87 kB │ gzip: 1.54 kB
+../dist/site/demo/index.html            5.56 kB │ gzip: 2.00 kB
+../dist/site/index.html                12.89 kB │ gzip: 3.95 kB
+../dist/site/assets/main-ldMlTHtD.css  14.87 kB │ gzip: 4.18 kB
+../dist/site/assets/main-DyWkfyt1.js   16.43 kB │ gzip: 6.48 kB
+✓ built in 274ms
+TAP version 13
+# Subtest: @claim:deployment-policy emitted Static Web Apps config sets security, cache, and real 404 behavior
+ok 1 - @claim:deployment-policy emitted Static Web Apps config sets security, cache, and real 404 behavior
+  ---
+  duration_ms: 2.165205
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 96.971646
+
+Verified 27 declared claims.

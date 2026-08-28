@@ -1,0 +1,40 @@
+npm notice
+npm notice 📦  event-payload-spillway@0.1.0
+npm notice Tarball Contents
+npm notice 473B CHANGELOG.md
+npm notice 1.1kB LICENSE
+npm notice 5.3kB README.md
+npm notice 2.0kB dist/package/cjs/bytes.js
+npm notice 1.2kB dist/package/cjs/index.js
+npm notice 1.1kB dist/package/cjs/memory-store.js
+npm notice 20B dist/package/cjs/package.json
+npm notice 4.3kB dist/package/cjs/proxy.js
+npm notice 7.7kB dist/package/cjs/s3-store.js
+npm notice 14.3kB dist/package/cjs/spillway.js
+npm notice 77B dist/package/cjs/types.js
+npm notice 1.5kB dist/package/esm/bytes.js
+npm notice 229B dist/package/esm/index.js
+npm notice 959B dist/package/esm/memory-store.js
+npm notice 4.1kB dist/package/esm/proxy.js
+npm notice 7.4kB dist/package/esm/s3-store.js
+npm notice 13.8kB dist/package/esm/spillway.js
+npm notice 11B dist/package/esm/types.js
+npm notice 639B dist/package/types/bytes.d.ts
+npm notice 689B dist/package/types/index.d.ts
+npm notice 372B dist/package/types/memory-store.d.ts
+npm notice 699B dist/package/types/proxy.d.ts
+npm notice 683B dist/package/types/s3-store.d.ts
+npm notice 839B dist/package/types/spillway.d.ts
+npm notice 2.5kB dist/package/types/types.d.ts
+npm notice 2.0kB package.json
+npm notice Tarball Details
+npm notice name: event-payload-spillway
+npm notice version: 0.1.0
+npm notice filename: event-payload-spillway-0.1.0.tgz
+npm notice package size: 14.5 kB
+npm notice unpacked size: 73.9 kB
+npm notice shasum: 061ebdcbfb67e7b03fa7318b73c783d9557f78dc
+npm notice integrity: sha512-b4Habiwce0h6K[...]0hBH5G+e5Rwxw==
+npm notice total files: 26
+npm notice
+event-payload-spillway-0.1.0.tgz

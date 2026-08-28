@@ -1,50 +1,64 @@
-# Handoff — Polish 3 complete
+# Handoff — Perfection loop round 3
 
 ## Status: PASS
 
-Repaired review candidate `890cb398f97914edd2647bf36af6484af98934e3` from review `ac176eb48d8caf53644eb43bec61977531172491`.
+Repaired candidate `22aaba426c9feafaee07e8ee5928c44bf242610d` against adversarial review commit `ac176eb48d8caf53644eb43bec61977531172491`.
 
-Implementation commit: `a236a9eb51a6f88bb254633ab418ec288b76b294` (`fix: stabilize demo navigation and focus order`).
+Code commits:
 
-Deployment: <https://event-payload-spillway.sociobot.in>.
+- `f30ff56` — deterministic route-history scroll, focus, and announcement restoration.
+- `2f92b89` — stronger live route acceptance and a product-colored route-heading focus state.
+
+Production deployment: `fa443a30-1df3-4371-aa6e-bf3e8561602d` at <https://event-payload-spillway.sociobot.in>.
 
 ## What changed
 
-- Back navigation now saves exact scroll coordinates and the activating control, disables smooth scroll only during restoration, waits for browser focus adjustment, restores coordinates, then announces the returned page. The browser regression performs eight Back cycles.
-- The demo result now appears before the form in both DOM and visual order. Keyboard users encounter the signed reference, Restore original, then the editor fields in downward screen order.
-- Replaced the remaining README harness jargon with a plain description of the fresh-project tarball verification.
-- Kept the existing one-click isolated `?demo=1`/`/demo` sample, banner/reset/leave controls, route metadata, legal pages, product 404, mobile layout, claim registry, and industrial-print visual identity. The catalog sentence is verb-first and 113 characters.
-- Updated the visual thesis and copy audit to remove stale action/reference terminology.
+- Removed the history-state leak that skipped restoration when the same entry was revisited. Each Back traversal now gets a fresh transaction and restores its saved control, exact coordinates, and announcement.
+- Removed global smooth scrolling from route restoration. The regression now revisits the same entry eight times at saved positions `0` and `137`, and checks every Back and Forward focus transition.
+- Made the keyboard-order assertion compare document positions, so scrolling cannot turn the check into a viewport-coordinate false failure.
+- Expanded the live verifier to cover repeated route restoration, result-before-editor keyboard order, direct `?demo=1`, shared route shells, metadata, 44 px targets, mobile overflow, privacy traffic, and the product 404.
+- Kept the completed cumulative work: direct first-screen wording, isolated seeded demo with banner/reset/leave controls, 27-claim registry, route titles and metadata, legal pages, offline behavior, product 404, mobile layout, and the industrial safety-manual visual identity.
+- Updated the catalog line to a 117-character, verb-first sentence: “Move selected oversized webhook fields out of database rows into encrypted S3-compatible storage with an npm library.”
 
-## Verification
+## Exact verification evidence
 
-Fresh clone: `/tmp/event-payload-spillway-polish3.yGDUpx` at `a236a9e`.
+Fresh no-local clone: `/tmp/event-payload-spillway-final.WyQpCt` at code commit `2f92b89`.
 
-- `npm ci` — passed; zero audit vulnerabilities.
-- `npm run test:claims` — 27/27 declared claim commands passed; `.factory/evidence/polish-3-clean-claims.txt`.
-- `npm test` — 37/37 passed; `.factory/evidence/polish-3-clean-suite.txt`.
-- `npm run check`, `npm audit --audit-level=moderate`, `npm pack --dry-run` — passed. Package tarball: 14.5 kB (73.9 kB unpacked).
-- Local browser/a11y/privacy/offline checks — zero axe violations, zero console errors, offline shell controlled; `.factory/evidence/polish-3-browser.txt`, `polish-3-pwa.txt`, `polish-3-verify-url.txt`.
-- Live cold check — title, `lang`, one `h1`, `main`, image alternatives, labels, and zero console errors; `.factory/evidence/polish-3-live-verify-url.txt`.
-- Live route/mobile/privacy/a11y check — five routes, 1.70% demo inline ratio, zero axe violations, no overflow, no undersized controls, same-origin GET-only demo traffic; `.factory/evidence/polish-3-live-review.txt`.
-- Live repeated navigation/keyboard check — five exact Back restorations and result → restore → editor focus sequence; `.factory/evidence/polish-3-live-keyboard.txt`.
-- Live PWA and Static Web Apps policy — service-worker offline reload, CSP/security headers, immutable asset cache, no-cache worker, and product HTTP 404 passed; `.factory/evidence/polish-3-live-pwa.txt`, `polish-3-live-deployment.txt`.
-- Live Lighthouse mobile — 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.4 s, CLS 0; `.factory/evidence/polish-3-lighthouse-live.json`.
+- `npm ci` — passed with zero vulnerabilities: `.factory/evidence/polish-3-retry2-final-clean-install.txt`.
+- `npm run test:claims` — all 27 declared claim commands passed: `.factory/evidence/polish-3-retry2-final-clean-claims.txt`.
+- `npm test` — 37/37 passed: `.factory/evidence/polish-3-retry2-final-clean-suite.txt`.
+- `npm run check`, `npm audit --audit-level=moderate`, and `npm pack --dry-run` passed: `.factory/evidence/polish-3-retry2-final-clean-check.txt`, `polish-3-retry2-final-clean-audit.txt`, and `polish-3-retry2-final-clean-pack.txt`.
+- Package dry-run: 14.5 kB packed, 73.9 kB unpacked, 26 files, zero runtime dependencies.
+- Additional route stress: 10 fresh runs × 8 Back restorations = 80/80 exact restorations passed.
 
-Screens: `.factory/evidence/live-home-390.png`, `live-demo-390.png`, `polish-3-live-demo-keyboard-390.png`, and `polish-3-live-404-390.png`.
+Post-deploy cold checks on the final build:
+
+- Baseline: title, `lang`, one `h1`, `main`, image alternatives, button labels, and console all passed: `.factory/evidence/polish-3-retry2-live/verify-url.txt`.
+- Route/mobile/a11y/privacy: five routes, zero axe violations, zero console errors, no 390 px overflow, no undersized controls, same-origin GET-only demo traffic, and direct `?demo=1` passed: `.factory/evidence/polish-3-retry2-live/review.txt`.
+- Route restoration: six repeated Back checks restored focus and exact saved positions `0` and `137`; every new destination focused and announced its `h1`.
+- Offline and deployment: service-worker reload, CSP/security headers, immutable hashed assets, no-cache worker, and product HTTP 404 passed: `.factory/evidence/polish-3-retry2-live/pwa.txt` and `deployment.txt`.
+- Link crawl: `/`, `/demo`, `/privacy/`, `/terms/`, GitHub, and MIT license returned 200; an unknown route returned the styled 404.
+- Lighthouse mobile: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.4 s, TBT 0 ms, CLS 0, 116 KiB transfer: `.factory/evidence/polish-3-retry2-live/lighthouse.json`.
+
+Live screenshots:
+
+- Home: `.factory/evidence/polish-3-retry2-live/live-home-390.png`
+- Demo: `.factory/evidence/polish-3-retry2-live/live-demo-390.png`
+- Keyboard sequence: `.factory/evidence/polish-3-retry2-live/demo-keyboard-390.png`
+- 404: `.factory/evidence/polish-3-retry2-live/404-390.png`
 
 ## Run and publish
 
 ```sh
 npm ci
-npm test
 npm run test:claims
+npm test
 npm run check
 npm pack
 ```
 
-`npm pack` creates the ready-to-publish library tarball. Registry publishing remains with the factory credentials.
+`npm pack` creates the ready-to-publish library tarball. Registry publishing remains with the factory.
 
 ## Known gaps / next steps
 
-None. All findings in `.factory/review-1.md`, `.factory/review-2.md`, and `.factory/review-3.md` are closed in `.factory/polish-3.md`.
+None. `.factory/polish-3.md` maps every finding from reviews 1–3 to its implementation and evidence.
