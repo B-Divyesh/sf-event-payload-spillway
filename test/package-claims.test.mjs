@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -46,6 +46,17 @@ test("@claim:package-formats a source checkout builds an installable tarball wit
     assert.deepEqual(manifest.dependencies ?? {}, {});
     assert.ok(existsSync(join(directory, "node_modules/event-payload-spillway/dist/package/types/index.d.ts")));
   } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test("@claim:registry-availability version 0.1.0 is not published to the npm registry", { timeout: 30_000 }, () => {
+  const manifest = JSON.parse(readFileSync("package.json", "utf8"));
+  const packageVersion = `${manifest.name}@${manifest.version}`;
+  const result = spawnSync("npm", ["view", packageVersion, "version", "--json"], { encoding: "utf8", timeout: 25_000 });
+  const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`;
+  assert.equal(result.status, 1, `${packageVersion} unexpectedly resolved from npm:\n${output}`);
+  assert.match(output, /E404/u, `npm must report ${packageVersion} as not found:\n${output}`);
+  assert.match(readFileSync("README.md", "utf8"), /Version 0\.1\.0 is not yet published to the npm registry\./u);
+  assert.match(readFileSync("dist/site/index.html", "utf8"), /Not yet published to npm\./u);
 });
 
 test("@claim:required-config landing copy names every required SpillwayConfig property", () => {

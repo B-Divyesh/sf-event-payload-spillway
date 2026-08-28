@@ -38,6 +38,15 @@ try {
   }
   assert.equal(await page.locator("header nav a:visible").count(), 4);
   if (evidence) await page.screenshot({ path: `${evidence}/live-home-390.png`, fullPage: true });
+  const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 }, serviceWorkers: "block" });
+  const desktopPage = await desktopContext.newPage();
+  await desktopPage.goto(base.href, { waitUntil: "networkidle" });
+  for (const selector of [".hero-actions", ".action-note", ".proof-list"]) {
+    const box = await desktopPage.locator(selector).boundingBox();
+    assert.ok(box && box.y >= 0 && box.y + box.height <= 900, `${selector} is below the 1440x900 first viewport: ${JSON.stringify(box)}`);
+  }
+  if (evidence) await desktopPage.screenshot({ path: `${evidence}/live-home-1440x900.png` });
+  await desktopContext.close();
   await page.locator("#try-demo").focus(); await page.keyboard.press("Enter"); await page.waitForURL(new URL("/demo", base).href); await page.locator("#decision-label").getByText("Diverted").waitFor();
   assert.equal(await page.evaluate(() => document.activeElement?.tagName), "H1");
   assert.equal(await page.getByText("Demo — sample data, nothing is saved").count(), 1); assert.equal(await page.getByRole("link", { name: "Leave demo" }).count(), 1);
@@ -68,5 +77,5 @@ try {
   if (evidence) await page.screenshot({ path: `${evidence}/404-390.png`, fullPage: true });
   const directDemo = await context.newPage(); await directDemo.goto(new URL("/?demo=1", base).href, { waitUntil: "networkidle" }); await directDemo.waitForURL(new URL("/demo", base).href); await directDemo.locator("#decision-label").getByText("Diverted").waitFor(); assert.equal(await directDemo.getByText("Demo — sample data, nothing is saved").count(), 1); await directDemo.close();
   assert.equal(requests.every(({ url }) => new URL(url).origin === base.origin), true); assert.equal(requests.every(({ method, data }) => method === "GET" && !data.includes("live-private-marker-4821")), true); assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ url: base.origin, demoBytes: { raw, inline, ratio: inline / raw }, routes: 5, axeViolations: 0, consoleErrors: 0, overflow: false, smallTargets: 0, backRestorations: 6, backFocus: "#try-demo", savedPositions: [0, 137], keyboardOrder, demoQueryRoute: true, requests: requests.length }));
+  console.log(JSON.stringify({ url: base.origin, firstScreens: ["390x844", "1440x900"], demoBytes: { raw, inline, ratio: inline / raw }, routes: 5, axeViolations: 0, consoleErrors: 0, overflow: false, smallTargets: 0, backRestorations: 6, backFocus: "#try-demo", savedPositions: [0, 137], keyboardOrder, demoQueryRoute: true, requests: requests.length }));
 } finally { await context.close(); await browser.close(); }

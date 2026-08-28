@@ -240,13 +240,20 @@ test("390px routes have no overflow, keep navigation, and expose 44px targets", 
   await context.close();
 });
 
-test("mobile first screen includes the action note and all three facts", async () => {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 } }); const page = await context.newPage(); await page.goto(origin, { waitUntil: "networkidle" });
-  for (const text of ["Try it with sample data", "Opens a seeded sample", "Demo data stays in this tab", "Works offline after first visit", "Free and MIT licensed"]) {
-    const box = await page.getByText(text, { exact: false }).first().boundingBox(); assert.ok(box && box.y + box.height <= 844, `${text} must be above the first fold: ${JSON.stringify(box)}`);
+test("mobile and desktop first screens include the action note and all three facts", async () => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1440, height: 900 }]) {
+    const context = await browser.newContext({ viewport }); const page = await context.newPage(); await page.goto(origin, { waitUntil: "networkidle" });
+    for (const selector of [".hero-actions", ".action-note", ".proof-list"]) {
+      const box = await page.locator(selector).boundingBox();
+      assert.ok(box && box.y >= 0 && box.y + box.height <= viewport.height, `${selector} must fit within ${viewport.width}x${viewport.height}: ${JSON.stringify(box)}`);
+    }
+    for (const text of ["Try it with sample data", "Opens a seeded sample", "Demo data stays in this tab", "Works offline after first visit", "Free and MIT licensed"]) {
+      const box = await page.getByText(text, { exact: false }).first().boundingBox();
+      assert.ok(box && box.y + box.height <= viewport.height, `${text} must fit within ${viewport.width}x${viewport.height}: ${JSON.stringify(box)}`);
+    }
+    assert.equal(await page.getByRole("button", { name: /^Copy$/u }).count(), 0);
+    await context.close();
   }
-  assert.equal(await page.getByRole("button", { name: /^Copy$/u }).count(), 0);
-  await context.close();
 });
 
 test("source installation is disclosed and copies the complete tarball workflow", async () => {

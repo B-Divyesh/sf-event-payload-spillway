@@ -1,4 +1,4 @@
-# Copy audit — polish 4
+# Copy audit — polish 5
 
 Counting uses whitespace-delimited words. Hyphenated terms and API names count as one. Code samples are excluded.
 
@@ -15,11 +15,11 @@ Counting uses whitespace-delimited words. Hyphenated terms and API names count a
 | Works offline after first visit | 5 | Offline fact |
 | Free and MIT licensed | 4 | Price/license fact |
 
-All eight items are visible before scrolling at 390×844. The desktop secondary action says `Install from source`. The first screen contains no banned word.
+All eight items are visible before scrolling at 390×844 and 1440×900. The desktop secondary action says `Install from source`. The first screen contains no banned word.
 
 ## Catalog description
 
-“Move oversized webhook fields from database rows into encrypted S3-compatible storage with a typed npm library.” is verb-first, 111 characters, and contains no banned word.
+“Move selected oversized webhook fields into encrypted S3-compatible storage before they reach database rows.” is verb-first, 108 characters, and contains no banned word.
 
 ## Landing sentences
 
@@ -39,7 +39,7 @@ All eight items are visible before scrolling at 390×844. The desktop secondary 
 | L12 | 9 | An AES-256-GCM envelope is written through an S3-compatible adapter. | `crypto-format`, `s3-compatibility` |
 | L13 | 10 | The reference records size, digest, field, redacted preview, and expiry. | `reference-shape` |
 | L14 | 15 | Choose allowed fields, an inline limit, storage, encryption and signing keys, and a retention window. | `required-config` |
-| L14a | 5 | Not yet published to npm. | Honest availability notice |
+| L14a | 5 | Not yet published to npm. | `registry-availability` |
 | L14b | 8 | Build its npm tarball from the source repository. | `package-formats` |
 | L15 | 9 | Count encrypted and expired bytes for the configured prefix. | `retention` |
 | L16 | 7 | Dry runs show expired candidates without deleting. | `retention` |
@@ -86,9 +86,9 @@ All controls name their result: `Try it with sample data`, `Install from source`
 
 | Copy | Words | Result |
 | --- | ---: | --- |
-| Version 0.1.0 is not yet published to the npm registry. | 10 | States availability without implying a registry release. |
+| Version 0.1.0 is not yet published to the npm registry. | 10 | `registry-availability` checks the public npm registry. |
 | Build its npm tarball from the source checkout. | 8 | Gives the current installation path. |
 | Package tests build and install the source tarball in a fresh project. | 12 | Names the observable verification. |
 | They run this example with ESM and Node 20. | 9 | Names the runtime and module format. |
 
-There are no remaining wording flags from reviews 1, 2, 3, or 4.
+There are no remaining wording flags from reviews 1, 2, 3, 4, or 5.

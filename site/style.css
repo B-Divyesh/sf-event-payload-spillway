@@ -47,11 +47,11 @@ nav a:hover { text-decoration: underline; }
 .action-note { margin: 14px 0 0; color: var(--muted); font-size: .76rem; line-height: 1.45; }
 
 .hero, .section, footer { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
-.hero { min-height: 720px; display: grid; grid-template-columns: .92fr 1.08fr; align-items: center; gap: 54px; padding: 76px 0 88px; }
+.hero { min-height: 720px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 46px; padding: 48px 0 64px; }
 .eyebrow { margin: 0 0 16px; color: var(--teal); font-size: .76rem; font-weight: 800; letter-spacing: .11em; line-height: 1.4; text-transform: uppercase; }
 .status-dot { display: inline-block; width: 9px; height: 9px; margin-right: 7px; background: var(--success); border-radius: 50%; box-shadow: 0 0 0 3px rgba(23,103,68,.16); }
 h1, h2, h3 { font-family: var(--display); line-height: .98; margin-top: 0; }
-h1 { max-width: 700px; margin-bottom: 24px; font-size: clamp(3.25rem, 6vw, 6.3rem); letter-spacing: -.045em; }
+h1 { max-width: 700px; margin-bottom: 24px; font-size: clamp(3.25rem, 5.2vw, 5.5rem); letter-spacing: -.045em; }
 h2 { margin-bottom: 18px; font-size: clamp(2.4rem, 4vw, 4.3rem); letter-spacing: -.035em; }
 h3 { font-size: 1.4rem; line-height: 1.1; }
 .lede { max-width: 62ch; margin: 0 0 32px; color: var(--muted); font-size: 1.12rem; line-height: 1.6; }
