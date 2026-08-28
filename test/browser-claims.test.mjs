@@ -249,6 +249,23 @@ test("mobile first screen includes the action note and all three facts", async (
   await context.close();
 });
 
+test("source installation is disclosed and copies the complete tarball workflow", async () => {
+  const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
+  const page = await context.newPage();
+  await page.goto(origin, { waitUntil: "networkidle" });
+  assert.match(await page.locator(".code-copy").innerText(), /Not yet published to npm\./u);
+  assert.equal(await page.getByText("Configure the required options", { exact: true }).count(), 1);
+  assert.equal(await page.getByText("Configure four required options", { exact: true }).count(), 0);
+  assert.equal(await page.getByText("npm install event-payload-spillway", { exact: true }).count(), 0);
+  await page.getByRole("button", { name: "Copy source install steps" }).click();
+  const copied = await page.evaluate(() => navigator.clipboard.readText());
+  assert.match(copied, /^git clone --depth 1 https:\/\/github\.com\/B-Divyesh\/sf-event-payload-spillway\.git spillway-src$/mu);
+  assert.match(copied, /^npm --prefix spillway-src run build:lib$/mu);
+  assert.match(copied, /^npm pack \.\/spillway-src$/mu);
+  assert.match(copied, /^npm install \.\/event-payload-spillway-0\.1\.0\.tgz$/mu);
+  await context.close();
+});
+
 test("all routes pass axe, semantic, keyboard-focus, and console checks", async () => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, bypassCSP: true }); const page = await context.newPage(); const errors = [];
   page.on("pageerror", (error) => errors.push(String(error))); page.on("console", (message) => { if (message.type() === "error" && !(page.url().includes("missing-accessibility") && message.text().includes("404"))) errors.push(message.text()); });

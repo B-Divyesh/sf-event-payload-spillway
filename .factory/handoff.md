@@ -1,44 +1,56 @@
-# Handoff — adversarial review 4
+# Handoff — polish 4
 
-## Status: FAIL
+## Status: complete
 
-Reviewed candidate `ff5425d769b2a6367666be7e2494d79128fac275` and the live site at <https://event-payload-spillway.sociobot.in>. No product code was changed.
+Candidate `ff5425d769b2a6367666be7e2494d79128fac275` was repaired from review commit `bb2ab12ad8da365fc09a43f523052ea8ed7f9087`.
+The implementation is commit `cbc223d` and is deployed at <https://event-payload-spillway.sociobot.in>.
 
-## What was done
+## What changed
 
-- Opened the live site cold at 390×844 and 1440×900 and recorded the first-screen interpretation.
-- Audited every landing and README sentence, heading, action, term, and claim-like statement.
-- Exercised the one-click demo, reset, restore, real-storage sentinels, browser stores, request traffic, and offline reload.
-- Ran all 27 exact claim commands and the 37-test aggregate suite from a real clean clone.
-- Rechecked every finding from reviews 1–3 against the live site and current code.
-- Checked route titles, metadata, shared shell, 404, deep links, Back focus/scroll, keyboard order, links, mobile layout, axe results, console output, and the distinct visual system.
-
-## Findings left
-
-- **F-4-1 (blocking):** `npm install event-payload-spillway` returns npm `E404`; the public install action is unusable and absent from the claim registry.
-- **F-1-51 (blocking, reopened):** `Configure four required options` contradicts the six required properties in `SpillwayConfig`.
-
-See `.factory/review-4.md` for exact quotes, evidence, rewrites, the full copy audit, claim matrix, and per-finding history recheck.
+- Removed every `npm install event-payload-spillway` promise because the name is not yet published in the npm registry.
+- Added an honest source checkout → build → pack → local npm install workflow to the landing page and README.
+- Replaced the false four-option heading and named all six required `SpillwayConfig` inputs.
+- Added `required-config` to `.factory/claims.json` and extended browser/package regressions for availability copy, configuration shape, copied commands, tarball installation, and execution.
+- Updated the catalog description and copy audit. The industrial safety-manual visual system and original spillway art remain unchanged.
+- Rechecked every finding from reviews 1–4; `.factory/polish-4.md` contains the complete mapping.
 
 ## Verification
 
+Final clean clone:
+
 ```sh
-cd /tmp/event-payload-spillway-review4.2upMDh
 npm ci
 npm run test:claims
 npm test
-
-cd /work/repo
-npm run verify:live-review -- https://event-payload-spillway.sociobot.in
-npm run verify:pwa -- https://event-payload-spillway.sociobot.in/demo
-npm run verify:deployment -- https://event-payload-spillway.sociobot.in
+npm run check
+npm audit --audit-level=moderate
+npm pack --dry-run
 ```
 
-Results: 27/27 registered claims passed; 37/37 aggregate tests passed; live route/a11y/privacy/offline/deployment checks passed. A fresh `npm install --prefix <temp-dir> event-payload-spillway` failed with `E404 Not Found`.
+Results: 28/28 exact claim commands passed; 39/39 aggregate tests passed; typecheck, audit, build, and pack passed. The package tarball is 14.6 kB.
 
-## Next steps
+The exact public source-install sequence was also run in a new temporary project. Its installed package completed spill and restore. Evidence: `.factory/evidence/polish-4-live/source-install.txt`.
 
-1. Publish `event-payload-spillway@0.1.0` or replace the public install instruction with an honest available source.
-2. Add a registry-install claim and fresh-project test.
-3. Remove the false four-option count and name the required encryption and signing keys.
-4. Rerun review 4 from a cold live deployment.
+Post-deploy checks:
+
+```sh
+npm run verify:live-review -- https://event-payload-spillway.sociobot.in .factory/evidence/polish-4-live
+npm run verify:pwa -- https://event-payload-spillway.sociobot.in
+npm run verify:deployment -- https://event-payload-spillway.sociobot.in
+/opt/fleet/lib/verify-url.sh https://event-payload-spillway.sociobot.in .factory/evidence/polish-4-live
+```
+
+The cold review passed five routes with zero axe violations, zero console errors, no mobile overflow, no undersized controls, exact focus/scroll restoration, privacy isolation, and direct `?demo=1` entry. Offline reload/restore, security headers, cache policy, and the HTTP 404 passed.
+
+Lighthouse mobile: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.4 s, TBT 0 ms, CLS 0, transfer 116 KiB.
+
+## Build and deployment
+
+- `npm run build` produces `dist/package` and `dist/site`.
+- `npm pack` prepares the npm artifact; registry publication remains owned by the factory and was not performed by this worker.
+- `dist/site` was uploaded to the existing `sf-event-payload-spillway` Azure Static Web App production environment.
+- The custom domain returned the repaired content immediately after deployment.
+
+## Known gaps
+
+None against the brief or reviews. Until the factory publishes the npm name, the product accurately presents and tests source-tarball installation only.

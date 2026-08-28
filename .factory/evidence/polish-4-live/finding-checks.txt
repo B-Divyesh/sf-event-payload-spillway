@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "falseRegistryCommand": false,
+  "requiredConfigCopy": true,
+  "sourceStepsCopied": true,
+  "firstScreenBottoms": {
+    "Try it with sample data": 548,
+    "Opens a seeded sample": 594,
+    "Demo data stays in this tab": 621,
+    "Works offline after first visit": 639,
+    "Free and MIT licensed": 657
+  }
+}
