@@ -6,6 +6,7 @@ if (pageKind === "home" && new URLSearchParams(location.search).get("demo") === 
 
 type NavigationState = {
   restoreFocus?: string;
+  restoreId?: string;
   scroll?: { x: number; y: number };
 };
 
@@ -17,43 +18,66 @@ const historyState = (): NavigationState => {
   const state = history.state;
   return state && typeof state === "object" ? state as NavigationState : {};
 };
-const saveScrollPosition = (): void => {
-  history.replaceState({ ...historyState(), scroll: { x: window.scrollX, y: window.scrollY } }, "");
+const focusSelector = (link: HTMLAnchorElement): string => {
+  if (link.id) return `#${CSS.escape(link.id)}`;
+  const path: string[] = [];
+  let element: Element | null = link;
+  while (element && element !== document.body) {
+    const parent: Element | null = element.parentElement;
+    if (!parent) break;
+    const peers = [...parent.children].filter((candidate) => candidate.tagName === element?.tagName);
+    path.unshift(`${element.tagName.toLowerCase()}:nth-of-type(${peers.indexOf(element) + 1})`);
+    element = parent;
+  }
+  return `body > ${path.join(" > ")}`;
 };
 document.addEventListener("click", (event) => {
   const link = (event.target as Element | null)?.closest<HTMLAnchorElement>("a[href]");
   if (!link || link.origin !== location.origin || link.target || link.hasAttribute("download")) return;
-  if (!link.id) link.id = `route-link-${crypto.randomUUID()}`;
-  history.replaceState({ ...historyState(), restoreFocus: `#${CSS.escape(link.id)}`, scroll: { x: window.scrollX, y: window.scrollY } }, "");
+  const restoreId = crypto.randomUUID();
+  history.replaceState({
+    ...historyState(),
+    restoreFocus: focusSelector(link),
+    restoreId,
+    // Capture at activation. pagehide is intentionally not used: Chromium can
+    // move a focused link by a few pixels while unloading and that position is
+    // not the one the visitor asked to return to.
+    scroll: { x: window.scrollX, y: window.scrollY },
+  }, "");
+  document.documentElement.dataset.routeRestore = `pending:${restoreId}`;
 });
-window.addEventListener("pagehide", saveScrollPosition);
 
 const announceRoute = (): void => {
   const announcement = document.querySelector<HTMLElement>(".route-announcement");
   if (announcement) announcement.textContent = `${document.querySelector("h1")?.textContent ?? document.title} loaded`;
 };
+let activeRestoreId = "";
 const restoreRoutePositionAndFocus = (): void => {
-  const { restoreFocus, scroll } = historyState();
-  if (!restoreFocus || !scroll) return;
+  const { restoreFocus, restoreId, scroll } = historyState();
+  if (!restoreFocus || !restoreId || !scroll || activeRestoreId === restoreId) return;
   const target = document.querySelector<HTMLElement>(restoreFocus);
   if (!target) return;
-  // Let history traversal and layout finish first. In Chromium, their final
-  // adjustment can arrive after pageshow; restoring only on the next frame
-  // leaves a small, observable offset on a fast back navigation.
-  document.documentElement.dataset.routeRestore = "pending";
+  activeRestoreId = restoreId;
+  document.documentElement.dataset.routeRestore = `pending:${restoreId}`;
   document.documentElement.classList.add("is-restoring-route");
-  window.setTimeout(() => requestAnimationFrame(() => {
-      target.focus({ preventScroll: true });
-      // Chromium can defer the focus adjustment by one paint. Make the saved
-      // coordinate authoritative only after that adjustment, then expose a
-      // completed transaction for keyboard and browser tests to wait on.
-      window.setTimeout(() => requestAnimationFrame(() => {
-        window.scrollTo(scroll.x, scroll.y);
-        document.documentElement.dataset.routeRestore = "done";
-        announceRoute();
-        requestAnimationFrame(() => document.documentElement.classList.remove("is-restoring-route"));
-      }), 100);
-  }), 120);
+  target.focus({ preventScroll: true });
+
+  // A restoration is complete only after focus and the saved coordinates stay
+  // exact across consecutive paints. This avoids fixed delays and gives both
+  // pageshow and popstate one generation-scoped transaction to observe.
+  let stableFrames = 0;
+  const settle = (): void => {
+    window.scrollTo(scroll.x, scroll.y);
+    requestAnimationFrame(() => {
+      const exact = window.scrollX === scroll.x && window.scrollY === scroll.y && document.activeElement === target;
+      stableFrames = exact ? stableFrames + 1 : 0;
+      if (stableFrames < 3) { settle(); return; }
+      document.documentElement.dataset.routeRestore = `done:${restoreId}`;
+      announceRoute();
+      document.documentElement.classList.remove("is-restoring-route");
+    });
+  };
+  requestAnimationFrame(settle);
 };
 window.addEventListener("pageshow", restoreRoutePositionAndFocus);
 window.addEventListener("popstate", restoreRoutePositionAndFocus);
@@ -145,5 +169,5 @@ if (form) {
 
 if (pageKind === "demo" || pageKind === "legal" || pageKind === "not-found") {
   const heading = document.querySelector<HTMLElement>("h1");
-  window.setTimeout(() => { heading?.focus({ preventScroll: true }); announceRoute(); }, 0);
+  if (!historyState().restoreId) window.setTimeout(() => { heading?.focus({ preventScroll: true }); announceRoute(); }, 0);
 }

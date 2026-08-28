@@ -177,13 +177,22 @@ test("@claim:site-routes every route has complete metadata and unknown paths ret
 test("route navigation restores the exact saved position, focus, and announcement repeatedly", async () => {
   const context = await browser.newContext(); const page = await context.newPage();
   await page.goto(origin, { waitUntil: "networkidle" });
+  let priorRestoreId = null;
   for (let attempt = 1; attempt <= 8; attempt += 1) {
     await page.locator("#try-demo").focus();
     await page.evaluate(() => window.scrollTo(0, 0));
     assert.equal(await page.evaluate(() => scrollY), 0, `attempt ${attempt} starts at the top`);
     await page.keyboard.press("Enter"); await page.waitForURL(`${origin}/demo`); await page.locator("h1").waitFor();
     await page.waitForFunction(() => document.activeElement?.tagName === "H1");
-    await page.goBack({ waitUntil: "networkidle" }); await page.waitForFunction(() => document.activeElement?.id === "try-demo" && document.documentElement.dataset.routeRestore === "done");
+    await page.goBack({ waitUntil: "networkidle" });
+    await page.waitForFunction(() => {
+      const id = history.state?.restoreId;
+      return typeof id === "string" && document.activeElement?.id === "try-demo" && document.documentElement.dataset.routeRestore === `done:${id}`;
+    });
+    const state = await page.evaluate(() => ({ restoreId: history.state?.restoreId, savedY: history.state?.scroll?.y, actualY: scrollY }));
+    assert.notEqual(state.restoreId, priorRestoreId, `attempt ${attempt} must complete a fresh restoration`);
+    assert.equal(state.savedY, 0, `attempt ${attempt} must not overwrite the activation position during pagehide`);
+    priorRestoreId = state.restoreId;
     assert.equal(await page.evaluate(() => scrollY), 0, `attempt ${attempt}`);
     assert.match(await page.locator(".route-announcement").innerText(), /Move oversized webhook fields/u);
   }

@@ -1,1 +1,1 @@
-Move selected oversized webhook fields from database rows to encrypted S3-compatible storage with an npm library.
+Move selected oversized webhook fields out of database rows into encrypted S3-compatible storage with an npm library.
