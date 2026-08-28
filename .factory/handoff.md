@@ -1,37 +1,43 @@
-# Handoff — adversarial review 1
+# Handoff — polish 1
 
-## Status: FAIL
+## Status: repaired and pushed
 
-Reviewed candidate `a1749da1e26b6524220fbc73e310498db2e31711` and the live site on 2026-08-28 UTC. No product code was modified. The complete first-read, copy, demo, claims, route, accessibility, and history review is in `.factory/review-1.md`.
+Repair commit: `ba1e77598fca710128af31f0432890601d671f1d`.
+It closes every finding in `.factory/review-1.md`; the detailed ID-to-change map is in `.factory/polish-1.md`.
 
-## What was done
+## Delivered
 
-- Opened the live site in fresh 390×844 and 1440×1000 Chromium contexts before scrolling.
-- Exercised the prefilled spill/restore interaction, edited/reset state, refresh behavior, offline behavior, storage, network requests, `/demo`, unknown routes, links, back navigation, focus, metadata, and touch targets.
-- Audited every landing and README sentence with word counts, plus headings and action labels.
-- Read the brief, design thesis, both earlier verification reports, and the previous handoff; rechecked the earlier security-header and caching defects.
-- Cloned the candidate with `--no-local`, detached at the requested commit, installed dependencies, and ran its tests/type check/build.
+- Rewrote the landing first screen for self-hosting webhook developers and made the npm-library form explicit.
+- Added one-click `/demo` and `?demo=1` entry. It seeds and runs a realistic event before ready, shows a persistent isolation banner, supports Reset demo, and never reads or writes real browser data.
+- Added claim registry and 15 independently runnable tagged claim commands. They cover library behavior, route/metadata/404, demo isolation, and warmed offline restore.
+- Added MPA demo/privacy/terms/404 routes, route titles and metadata, 1200×630 social card, apple-touch icon, shared legal shell, external-link labels, touch-target spacing, and Static Web Apps fallback/404 policy.
+- Rewrote reviewed copy, terminology, README, catalog line, and legal/limits text. The dithered industrial spillway identity is retained.
+- Added browser screenshots: `.factory/evidence/demo-390.png` and `.factory/evidence/home-1440.png`.
 
-## Verification results
+## Exact verification evidence
+
+Clean detached clone: `/tmp/spillway-clean-nJd7W5` at `ba1e775`.
 
 ```text
-clean npm ci                                      PASS
-clean npm test                                    PASS (12/12)
-clean npm run check                               PASS
-clean npm run build                               PASS
-npm run verify:deployment -- <live>               PASS after required local build
-npm run verify:browser -- <live>                  PASS (axe 0; console 0)
-npm run verify:pwa -- <live>                      PASS
-/opt/fleet/lib/verify-url.sh <live> <temp-dir>    PASS
-extra axe: /, /privacy/, /terms/ at two widths    PASS (0 violations)
-.factory/claims.json                              MISSING
-@claim tags                                       0
-/demo                                             FAIL (generic 404)
-unknown-route design                              FAIL (generic Azure 404)
+npm ci                                             PASS (0 vulnerabilities)
+npm test                                           PASS (18/18)
+npm run check                                      PASS
+npm pack --dry-run                                 PASS (14.4 kB package)
+every .factory/claims.json command (clean clone)   PASS (15/15)
+node scripts/verify-browser.mjs .../demo/          PASS (axe 0; console 0; spill/restore)
+node scripts/verify-pwa.mjs .../                   PASS (offline shell; console 0)
+verify-url.sh local root                            PASS (title/lang/h1/main/alt/console)
+axe smoke /, /demo/, /privacy/, /terms/, /404.html PASS (0 serious/critical)
 ```
 
-Observed demo-like processing used only same-origin GET requests, did not write localStorage/sessionStorage/IndexedDB, preserved an injected real-storage sentinel, and disappeared on refresh. However, there is no one-click already-running demo, demo banner, reset-to-seed behavior, start-for-real action, demo route, demo documentation, claim registry, or tagged claim test.
+Built site: JS 14.44 kB raw / 5.76 kB gzip; CSS 14.23 kB raw / 4.04 kB gzip.
 
-## Known gaps / next steps
+## Deployment
 
-Resolve every finding in `.factory/review-1.md`. The release blockers are F-1-1 through F-1-6. Do not treat the passing ordinary suite as claim verification; first create the demo contract and claim registry, then rerun every registered test and the entire adversarial checklist from a clean state.
+Pushed `main` to `origin` at `ba1e775`. Static deployment configuration is emitted in `dist/site/staticwebapp.config.json` and includes response headers, cache rules, navigation fallback, and the product 404 override.
+
+At the time of this handoff write, the public endpoint still served the pre-repair `6632d7b` artifact (`/demo` returned the old Azure 404). The deployment worker must finish publishing the pushed commit before live cold checks can truthfully pass. No code or test gap remains in the committed artifact.
+
+## Known product gaps
+
+None. The library intentionally does not automate key rotation, configure a provider lifecycle rule, or add operator authentication; these are explicit operator responsibilities, not omitted promised features.
