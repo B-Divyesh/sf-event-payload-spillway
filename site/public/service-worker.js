@@ -1,5 +1,5 @@
-const CACHE = "spillway-shell-v1";
-const SHELL = ["/", "/index.html", "/demo", "/demo/", "/privacy/", "/terms/", "/404.html", "/hero-spillway-720.webp"];
+const CACHE = "spillway-shell-v2";
+const SHELL = ["/", "/index.html", "/demo", "/demo/", "/privacy/", "/terms/", "/404.html", "/apple-touch-icon.png", "/hero-spillway-720.webp"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));

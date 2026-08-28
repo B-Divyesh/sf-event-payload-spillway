@@ -4,6 +4,25 @@ import "./style.css";
 const pageKind = document.body.dataset.page;
 if (pageKind === "home" && new URLSearchParams(location.search).get("demo") === "1") location.replace("/demo");
 
+history.scrollRestoration = "auto";
+document.addEventListener("click", (event) => {
+  const link = (event.target as Element | null)?.closest<HTMLAnchorElement>("a[href]");
+  if (!link || link.origin !== location.origin || link.target || link.hasAttribute("download")) return;
+  if (!link.id) link.id = `route-link-${crypto.randomUUID()}`;
+  history.replaceState({ ...(history.state as object | null), restoreFocus: `#${CSS.escape(link.id)}` }, "");
+});
+const restoreRouteFocus = (): void => {
+  const selector = (history.state as { restoreFocus?: string } | null)?.restoreFocus;
+  if (!selector) return;
+  const target = document.querySelector<HTMLElement>(selector);
+  if (!target) return;
+  target.focus({ preventScroll: true });
+  const announcement = document.querySelector<HTMLElement>(".route-announcement");
+  if (announcement) announcement.textContent = `${document.querySelector("h1")?.textContent ?? document.title} loaded`;
+};
+window.addEventListener("pageshow", restoreRouteFocus);
+window.setTimeout(restoreRouteFocus, 0);
+
 const offline = document.querySelector<HTMLElement>("#offline");
 const updateNetwork = (): void => { if (offline) offline.hidden = navigator.onLine; };
 window.addEventListener("online", updateNetwork);
@@ -37,14 +56,14 @@ const required = <T extends Element>(selector: string): T => { const element = d
 const form = document.querySelector<HTMLFormElement>("#spill-form");
 
 if (form) {
-  const sample = { event: "render.complete", job_id: "job_7f31", result: { mime: "image/png", attachment: `data:image/png;base64,${"R0lGODlhAQABAIAAAAUEBA".repeat(360)}` } };
+  let sample: JsonValue | null = null;
   const payloadInput = required<HTMLTextAreaElement>("#payload"); const pointerInput = required<HTMLInputElement>("#pointer"); const thresholdInput = required<HTMLInputElement>("#threshold");
   const errorOutput = required<HTMLElement>("#payload-error"); const inputSize = required<HTMLElement>("#input-size"); const emptyResult = required<HTMLElement>("#empty-result"); const resultContent = required<HTMLElement>("#result-content"); const decisionLabel = required<HTMLElement>("#decision-label"); const spillButton = required<HTMLButtonElement>("#spill-button"); const restoreButton = required<HTMLButtonElement>("#restore-button"); const resetButton = document.querySelector<HTMLButtonElement>("#reset-button"); const restoreStatus = required<HTMLElement>("#restore-status"); const resultMessage = required<HTMLElement>("#result-message"); const stubOutput = required<HTMLElement>("#stub-output code");
   let active: { spillway: Spillway; result: SpillResult } | null = null;
   const bytes = (count: number): string => count < 1024 ? `${count} B` : `${(count / 1024).toFixed(count < 10240 ? 1 : 0)} KB`;
   const updateInputSize = (): void => { inputSize.textContent = bytes(new TextEncoder().encode(payloadInput.value).byteLength); };
   const setError = (message: string): void => { errorOutput.textContent = message; payloadInput.setAttribute("aria-invalid", message ? "true" : "false"); };
-  const resetDemo = (): void => { active = null; payloadInput.value = JSON.stringify(sample, null, 2); pointerInput.value = "/result/attachment"; thresholdInput.value = "2048"; updateInputSize(); emptyResult.hidden = false; resultContent.hidden = true; decisionLabel.textContent = "Waiting"; restoreStatus.textContent = ""; setError(""); };
+  const resetDemo = (): void => { if (!sample) return; active = null; payloadInput.value = JSON.stringify(sample, null, 2); pointerInput.value = "/result/attachment"; thresholdInput.value = "2048"; updateInputSize(); emptyResult.hidden = false; resultContent.hidden = true; decisionLabel.textContent = "Waiting"; restoreStatus.textContent = ""; setError(""); };
   async function runSpill(auto = false): Promise<void> {
     setError(""); restoreStatus.textContent = ""; let payload: JsonValue;
     try { payload = JSON.parse(payloadInput.value) as JsonValue; } catch { setError("This is not valid JSON. Fix the highlighted payload and try again."); payloadInput.focus(); return; }
@@ -54,17 +73,39 @@ if (form) {
     try {
       const spillway = new Spillway({ allowlist: [pointerInput.value], maxInlineBytes: threshold, store: new MemoryStore(), encryptionKey: await generateKey(), signingKey: await generateKey(), expiresInMs: 7 * 24 * 60 * 60 * 1000, publicBaseUrl: "https://hooks.example.net/__spillway" } as ConstructorParameters<typeof Spillway>[0]);
       const result = await spillway.spill(payload); active = { spillway, result }; const avoided = Math.max(0, Math.round((1 - result.inlineBytes / result.rawBytes) * 100));
-      required("#raw-bytes").textContent = bytes(result.rawBytes); required("#inline-bytes").textContent = bytes(result.inlineBytes); required("#avoided-percent").textContent = `${avoided}%`; required<HTMLElement>("#bar-inline").style.width = `${Math.max(2, Math.min(100, 100 - avoided))}%`; emptyResult.hidden = true; resultContent.hidden = false;
+      const rawOutput = required<HTMLElement>("#raw-bytes"); const inlineOutput = required<HTMLElement>("#inline-bytes");
+      rawOutput.textContent = bytes(result.rawBytes); rawOutput.dataset.bytes = String(result.rawBytes); inlineOutput.textContent = bytes(result.inlineBytes); inlineOutput.dataset.bytes = String(result.inlineBytes); required("#avoided-percent").textContent = `${avoided}%`; required<HTMLElement>("#bar-inline").style.width = `${Math.max(2, Math.min(100, 100 - avoided))}%`; emptyResult.hidden = true; resultContent.hidden = false;
       if (result.spilledCount) { decisionLabel.textContent = "Diverted"; resultMessage.className = "result-message success"; resultMessage.textContent = `✓ ${result.spilledCount} oversized allowed field moved to an encrypted object. Database row uses ${result.inlineBytes} of ${result.rawBytes} bytes.`; stubOutput.textContent = JSON.stringify(result.payload, null, 2); restoreButton.hidden = false; }
       else { decisionLabel.textContent = "Inline"; resultMessage.className = "result-message neutral"; resultMessage.textContent = "No allowed field crossed the limit. The event stays inline."; stubOutput.textContent = JSON.stringify(result.payload, null, 2); restoreButton.hidden = true; }
       if (!auto) resultContent.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "nearest" });
     } catch (error) { active = null; setError(error instanceof Error ? error.message : "The spill decision failed. Check the configuration and retry."); decisionLabel.textContent = "Error"; }
     finally { spillButton.disabled = false; spillButton.innerHTML = 'Show spill result <span aria-hidden="true">→</span>'; }
   }
-  payloadInput.value = JSON.stringify(sample, null, 2); updateInputSize(); payloadInput.addEventListener("input", updateInputSize); form.addEventListener("submit", (event) => { event.preventDefault(); void runSpill(); });
+  async function loadSample(): Promise<void> {
+    const response = await fetch("/apple-touch-icon.png", { cache: "force-cache" });
+    if (!response.ok) throw new Error("The sample image could not be loaded. Reload the page and try again.");
+    const image = new Uint8Array(await response.arrayBuffer());
+    let binary = "";
+    for (const byte of image) binary += String.fromCharCode(byte);
+    sample = {
+      event: "render.complete",
+      job_id: "job_7f31",
+      renderer: "canvas-v4",
+      result: {
+        filename: "spillway-pressure-map.png",
+        width: 180,
+        height: 180,
+        mime: "image/png",
+        attachment: `data:image/png;base64,${btoa(binary)}`,
+      },
+    };
+    resetDemo();
+    if (pageKind === "demo") await runSpill(true);
+  }
+  updateInputSize(); payloadInput.addEventListener("input", updateInputSize); form.addEventListener("submit", (event) => { event.preventDefault(); void runSpill(); });
   resetButton?.addEventListener("click", () => { resetDemo(); void runSpill(true); });
   restoreButton.addEventListener("click", async () => { if (!active) return; restoreButton.disabled = true; restoreStatus.textContent = "Decrypting and checking integrity…"; try { const restored = await active.spillway.restore(active.result.payload); const value = pointerInput.value.split("/").filter(Boolean).reduce<JsonValue | undefined>((current, key) => current && typeof current === "object" && !Array.isArray(current) ? current[key] : undefined, restored.payload); restoreStatus.textContent = `✓ Restored ${restored.restoredCount} field locally; recovered value is ${bytes(new TextEncoder().encode(JSON.stringify(value)).byteLength)}.`; } catch (error) { restoreStatus.textContent = error instanceof Error ? `Restore failed: ${error.message}` : "Restore failed. Run the sample again."; } finally { restoreButton.disabled = false; } });
-  if (pageKind === "demo") { resetDemo(); void runSpill(true); }
+  void loadSample().catch((error) => { setError(error instanceof Error ? error.message : "The sample image could not be loaded."); decisionLabel.textContent = "Error"; });
 }
 
 if (pageKind === "demo" || pageKind === "legal" || pageKind === "not-found") {

@@ -13,7 +13,7 @@ const policy = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
 };
 
-test("Static Web Apps policy is emitted unchanged with security and cache routes", () => {
+test("@claim:deployment-policy emitted Static Web Apps config sets security, cache, and real 404 behavior", () => {
   assert.equal(existsSync(new URL("_headers", sourceRoot)), false, "unsupported _headers source must not remain");
   assert.equal(existsSync(new URL("_headers", siteRoot)), false, "unsupported _headers artifact must not be deployed");
 
@@ -27,7 +27,7 @@ test("Static Web Apps policy is emitted unchanged with security and cache routes
     { route: "/assets/*", headers: { "Cache-Control": "public, max-age=31536000, immutable" } },
     { route: "/service-worker.js", headers: { "Cache-Control": "no-cache" } },
   ]);
-  assert.equal(config.navigationFallback.rewrite, "/index.html");
+  assert.equal(config.navigationFallback, undefined, "a catch-all navigation fallback would turn unknown paths into home/200");
   assert.equal(config.responseOverrides["404"].rewrite, "/404.html");
 });
 

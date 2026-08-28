@@ -20,10 +20,6 @@
       }
     }
   ],
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/demo", "/demo/*", "/privacy/*", "/terms/*", "/404.html", "/assets/*", "/service-worker.js", "/manifest.webmanifest", "/robots.txt", "/sitemap.xml"]
-  },
   "responseOverrides": {
     "404": {
       "rewrite": "/404.html"

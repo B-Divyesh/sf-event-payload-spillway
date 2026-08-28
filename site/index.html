@@ -35,7 +35,7 @@
           <h1 id="hero-title">Move oversized webhook fields out of your database</h1>
           <p class="lede">For self-hosting developers whose webhook or automation events sometimes carry large base64, media, or JSON values. This is an npm library.</p>
           <div class="hero-actions">
-            <a class="button primary" href="/demo">Try it with sample data <span aria-hidden="true">→</span></a>
+            <a class="button primary" id="try-demo" href="/demo">Try it with sample data <span aria-hidden="true">→</span></a>
             <button class="button secondary copy-install" type="button" data-copy="npm install event-payload-spillway">Copy install command</button>
           </div>
           <p class="action-note">Opens a seeded sample with the spill result already shown.</p>
@@ -70,7 +70,7 @@
             <p class="field-error" id="payload-error" role="alert"></p>
             <div class="control-row">
               <div>
-                <label for="pointer">Allowed JSON pointer</label>
+                <label for="pointer">Allowed JSON Pointer</label>
                 <input id="pointer" name="pointer" value="/result/attachment" autocomplete="off">
               </div>
               <div>
@@ -82,10 +82,10 @@
           </form>
 
           <section class="instrument result" aria-labelledby="result-title">
-            <div class="instrument-head"><span id="result-title">Spill ledger</span><span id="decision-label">Waiting</span></div>
+            <div class="instrument-head"><span id="result-title">Spill result</span><span id="decision-label">Waiting</span></div>
             <div id="empty-result" class="empty-state">
               <div class="empty-gauge" aria-hidden="true"><span></span></div>
-              <h3>No decision yet</h3>
+              <h3>No spill decision yet</h3>
               <p>Show the sample event to create a signed reference.</p>
             </div>
             <div id="result-content" hidden>
@@ -137,8 +137,8 @@
             <button role="tab" aria-selected="false" aria-controls="code-config" id="tab-config" type="button" tabindex="-1">Configure</button>
             <button role="tab" aria-selected="false" aria-controls="code-proxy" id="tab-proxy" type="button" tabindex="-1">Proxy</button>
           </div>
-          <div class="code-block" id="code-install" role="tabpanel" aria-labelledby="tab-install"><button class="copy-code" type="button" data-copy="npm install event-payload-spillway">Copy</button><pre><code>npm install event-payload-spillway</code></pre></div>
-          <div class="code-block" id="code-config" role="tabpanel" aria-labelledby="tab-config" hidden><button class="copy-code" type="button" data-copy-target="config-code">Copy</button><pre><code id="config-code">const spillway = new Spillway({
+          <div class="code-block" id="code-install" role="tabpanel" aria-labelledby="tab-install"><button class="copy-code" type="button" data-copy="npm install event-payload-spillway">Copy install command</button><pre><code>npm install event-payload-spillway</code></pre></div>
+          <div class="code-block" id="code-config" role="tabpanel" aria-labelledby="tab-config" hidden><button class="copy-code" type="button" data-copy-target="config-code">Copy configuration</button><pre><code id="config-code">const spillway = new Spillway({
   allowlist: ["/result/attachment"],
   maxInlineBytes: 32_000,
   store: new S3CompatibleStore(s3),
@@ -146,7 +146,7 @@
   signingKey,
   expiresInMs: 604_800_000,
 });</code></pre></div>
-          <div class="code-block" id="code-proxy" role="tabpanel" aria-labelledby="tab-proxy" hidden><button class="copy-code" type="button" data-copy-target="proxy-code">Copy</button><pre><code id="proxy-code">const handle = createSpillwayProxy({
+          <div class="code-block" id="code-proxy" role="tabpanel" aria-labelledby="tab-proxy" hidden><button class="copy-code" type="button" data-copy-target="proxy-code">Copy proxy example</button><pre><code id="proxy-code">const handle = createSpillwayProxy({
   spillway,
   upstream: "http://automation:3000/events",
   verifyWebhook: ({ rawBody, headers }) =&gt;

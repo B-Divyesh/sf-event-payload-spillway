@@ -44,7 +44,8 @@ const restored = await spillway.restore(output.payload);
 console.log(restored.restoredCount); // 1
 ```
 
-The packed-consumer test covers this example.
+The packed-consumer tests run this example through ESM and Node 20.
+They also compile the public declarations and load the CommonJS entry.
 
 ## S3-compatible storage
 
@@ -113,10 +114,12 @@ Add a matching bucket lifecycle rule and review retention requirements before en
 ## Demo
 
 Open [the demo](https://event-payload-spillway.sociobot.in/demo) or `?demo=1` on the landing page.
-It immediately runs a realistic render event in browser memory.
-The banner identifies sample mode and offers Reset demo and Start for real.
+It immediately runs a render event with a valid, original PNG attachment.
+The shipped sample keeps its database row below 10% of the event size.
+The banner identifies sample mode and offers Reset demo and Leave demo.
 Demo keys, encrypted objects, and edits disappear on refresh.
-The demo makes no payload uploads and writes no browser storage.
+The demo makes no payload uploads.
+It writes no payload data to browser storage.
 See [.factory/demo.md](.factory/demo.md) for its isolation contract.
 
 ## Development
@@ -139,7 +142,7 @@ Run `npm run verify:pwa -- http://127.0.0.1:4174` for the offline shell.
 
 Deploy `dist/site/` as Azure Static Web Apps static content.
 `staticwebapp.config.json` sets browser security headers and cache rules.
-It rewrites unknown routes to the product 404 page.
+It sends unknown routes to the product 404 page with HTTP 404.
 Run `npm run verify:deployment -- https://event-payload-spillway.sociobot.in` after deployment.
 Use `npm pack` to prepare the library for publishing.
 The factory owns publishing credentials and deployment.

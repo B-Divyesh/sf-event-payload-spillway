@@ -30,10 +30,16 @@ assert.equal(assetResponse.headers.get("cache-control"), "public, max-age=315360
 const worker = await responseFor("/service-worker.js");
 assert.equal(worker.headers.get("cache-control"), "no-cache", "the service worker must be revalidated for updates");
 
+const missing = await fetch(new URL(`/definitely-missing-${Date.now()}`, origin), { redirect: "manual" });
+assert.equal(missing.status, 404, "unknown routes must return HTTP 404");
+const missingHtml = await missing.text();
+assert.match(missingHtml, /This page did not reach the spillway/u, "unknown routes must render the product 404");
+
 console.log(JSON.stringify({
   url: origin.origin,
   securityHeaders: Object.keys(expectedHeaders),
   asset,
   assetCacheControl: assetResponse.headers.get("cache-control"),
   serviceWorkerCacheControl: worker.headers.get("cache-control"),
+  unknownRouteStatus: missing.status,
 }));

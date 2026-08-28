@@ -47,7 +47,7 @@
     "build:site": "vite build --config vite.config.ts --outDir ../dist/site --emptyOutDir",
     "build": "npm run build:lib && npm run build:site",
     "test": "npm run build && node --test test/*.test.mjs",
-    "test:claims": "npm run build && node --test test/spillway.test.mjs test/browser-claims.test.mjs",
+    "test:claims": "node scripts/verify-claims.mjs",
     "verify:browser": "node scripts/verify-browser.mjs",
     "verify:deployment": "node scripts/verify-deployment-policy.mjs",
     "verify:pwa": "node scripts/verify-pwa.mjs",

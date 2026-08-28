@@ -29,7 +29,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, pre:focus-visible { outline: 3px solid var(--brass); outline-offset: 3px; }
 [hidden] { display: none !important; }
 
-.skip-link { position: fixed; top: 12px; left: 12px; z-index: 100; padding: 12px 16px; background: var(--ink); color: #fff; transform: translateY(-160%); }
+.skip-link { position: fixed; top: 12px; left: 12px; z-index: 100; min-height: 44px; padding: 12px 16px; display: inline-flex; align-items: center; background: var(--ink); color: #fff; transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }
 .offline { padding: 10px 24px; text-align: center; background: var(--brass); border-bottom: 2px solid var(--ink); }
 .route-announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -38,7 +38,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .wordmark { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-family: var(--display); font-size: 1.2rem; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; text-decoration: none; }
 .wordmark span { display: grid; place-items: center; width: 28px; height: 28px; color: var(--raised); background: var(--teal); border: 2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink); }
 nav { display: flex; align-items: center; gap: 28px; }
-nav a { min-height: 44px; display: inline-flex; align-items: center; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; }
+nav a { min-width: 44px; min-height: 44px; padding-inline: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; }
 nav a:hover { text-decoration: underline; }
 .external { font-size: .72em; white-space: nowrap; }
 .action-note { margin: 14px 0 0; color: var(--muted); font-size: .76rem; line-height: 1.45; }
@@ -136,6 +136,7 @@ pre { margin: 0; overflow: auto; max-height: 270px; padding: 18px; color: #f7f1d
 .code-block { position: relative; }
 .code-block pre { min-height: 232px; border: 0; padding: 30px 22px; }
 .copy-code { position: absolute; z-index: 1; right: 12px; top: 12px; min-width: 64px; min-height: 44px; padding: 8px 12px; color: var(--raised); background: #314039; border: 1px solid #748078; cursor: pointer; }
+.code-block pre { padding-top: 76px; }
 
 .ops-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .ops-grid article { padding: 28px 0; border-top: 2px solid var(--ink); }
@@ -147,20 +148,22 @@ pre { margin: 0; overflow: auto; max-height: 270px; padding: 18px; color: #f7f1d
 .final-cta { padding-block: 112px; text-align: center; }
 .final-cta h2 { max-width: 760px; margin-inline: auto; }
 .final-cta > div { justify-content: center; margin-top: 30px; }
-footer { padding: 42px 0 56px; border-top: 2px solid var(--ink); }
+footer { padding: 42px 0 56px; border-top: 2px solid var(--ink); flex-wrap: wrap; }
 footer p { color: var(--muted); font-size: .72rem; }
-.build-id { white-space: nowrap; }
+.build-id { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 .limits { max-width: 840px; }
 .limits > p:not(.eyebrow), .legal-page p { max-width: 68ch; color: var(--muted); line-height: 1.6; }
 .legal-page { width: min(820px, calc(100% - 48px)); margin: 0 auto; padding: 88px 0 96px; }
 .legal-page h1 { font-size: clamp(3rem, 6vw, 5.4rem); }
 .legal-page h2 { margin-top: 48px; font-size: clamp(2rem, 3vw, 3rem); }
+.legal-page p a { min-width: 44px; min-height: 44px; padding: 11px 4px; display: inline-flex; align-items: center; }
 .summary { padding: 20px; background: var(--raised); border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--teal); }
 .not-found { min-height: 65vh; padding-top: 132px; }
 
 @keyframes advance { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: translateX(0); } }
 @media (max-width: 900px) {
-  .site-header nav a:nth-child(2), .site-header nav a:nth-child(3) { display: none; }
+  .site-header { gap: 12px; }
+  .site-header nav { gap: 12px; }
   .hero { min-height: auto; grid-template-columns: 1fr; padding-top: 58px; }
   .hero-copy { max-width: 760px; }
   .hero-figure { width: calc(100% - 8px); }
@@ -172,14 +175,20 @@ footer p { color: var(--muted); font-size: .72rem; }
 }
 @media (max-width: 560px) {
   .site-header, .hero, .section, footer { width: min(100% - 28px, 1180px); }
-  .site-header { min-height: 66px; }
-  .site-header nav { gap: 12px; }
-  .site-header nav a { font-size: .67rem; }
-  .site-header nav a:first-child { display: none; }
-  .site-header nav a:nth-child(4) { display: none; }
-  h1 { font-size: clamp(3rem, 15vw, 4.2rem); }
+  .site-header { min-height: 112px; padding-block: 7px; flex-wrap: wrap; }
+  .site-header .wordmark { min-height: 44px; }
+  .site-header nav { width: 100%; justify-content: space-between; gap: 2px; }
+  .site-header nav a { padding-inline: 3px; font-size: .61rem; letter-spacing: .035em; }
+  h1 { font-size: clamp(2.45rem, 12vw, 3.4rem); }
   h2 { font-size: 2.65rem; }
-  .hero { gap: 44px; padding: 50px 0 66px; }
+  .hero { gap: 44px; padding: 24px 0 66px; }
+  .hero h1 { margin-bottom: 16px; }
+  .hero .eyebrow { margin-bottom: 10px; }
+  .hero .lede { margin-bottom: 18px; font-size: 1rem; line-height: 1.45; }
+  .hero-actions { gap: 8px; }
+  .hero-actions .copy-install { display: none; }
+  .action-note { margin-top: 10px; }
+  .proof-list { gap: 5px 12px; margin-top: 14px; font-size: .68rem; }
   body[data-page="demo"] .section-heading h1 { font-size: clamp(2.65rem, 13vw, 3.55rem); }
   .hero-actions .button { width: 100%; }
   .hero-figure::before { left: -6px; top: 12px; }
@@ -191,8 +200,8 @@ footer p { color: var(--muted); font-size: .72rem; }
   .measurements strong { font-size: 1.22rem; }
   .measurements div { padding: 10px; }
   .code-tabs { overflow-x: auto; }
-  footer { align-items: flex-start; gap: 24px; }
-  footer nav { align-items: flex-start; flex-direction: column; gap: 0; }
+  footer { align-items: flex-start; flex-direction: column; gap: 18px; }
+  footer nav { width: 100%; align-items: flex-start; flex-wrap: wrap; gap: 4px 12px; }
   .demo-banner { width: min(100% - 28px, 1180px); margin-top: 14px; }
   .demo-banner .text-button { margin-left: 0; }
   .legal-page { width: min(100% - 28px, 820px); padding-block: 64px; }
