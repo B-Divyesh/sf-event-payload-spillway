@@ -40,7 +40,7 @@ npm run verify:deployment -- https://event-payload-spillway.sociobot.in
 /opt/fleet/lib/verify-url.sh https://event-payload-spillway.sociobot.in .factory/evidence/polish-4-live
 ```
 
-The cold review passed five routes with zero axe violations, zero console errors, no mobile overflow, no undersized controls, exact focus/scroll restoration, privacy isolation, and direct `?demo=1` entry. Offline reload/restore, security headers, cache policy, and the HTTP 404 passed.
+The cold review passed five routes with zero axe violations, zero console errors, no mobile overflow, no undersized controls, exact focus/scroll restoration, privacy isolation, and direct `?demo=1` entry. The internal route/fragment and external-link crawl passed. Offline reload/restore, security headers, cache policy, and the HTTP 404 passed.
 
 Lighthouse mobile: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.4 s, TBT 0 ms, CLS 0, transfer 116 KiB.
 

@@ -1,0 +1,33 @@
+{
+  "routes": [
+    "/",
+    "/demo",
+    "/privacy/",
+    "/terms/",
+    "/missing-link-crawl"
+  ],
+  "internalLinks": [
+    {
+      "url": "https://event-payload-spillway.sociobot.in/",
+      "status": 200
+    },
+    {
+      "url": "https://event-payload-spillway.sociobot.in/demo",
+      "status": 200
+    },
+    {
+      "url": "https://event-payload-spillway.sociobot.in/privacy/",
+      "status": 200
+    },
+    {
+      "url": "https://event-payload-spillway.sociobot.in/terms/",
+      "status": 200
+    }
+  ],
+  "externalLinks": [
+    "https://github.com/B-Divyesh/sf-event-payload-spillway",
+    "https://github.com/B-Divyesh/sf-event-payload-spillway/blob/main/LICENSE"
+  ]
+}
+200 https://github.com/B-Divyesh/sf-event-payload-spillway
+200 https://github.com/B-Divyesh/sf-event-payload-spillway/blob/main/LICENSE

@@ -14,6 +14,7 @@ Deployed URL: <https://event-payload-spillway.sociobot.in>.
 - **P** — live offline, deployment, and URL checks: `.factory/evidence/polish-4-live/pwa.txt`, `deployment.txt`, and `verify-url.txt`.
 - **S** — exact public source-install workflow from a new temporary project: `.factory/evidence/polish-4-live/source-install.txt`.
 - **F** — cold live checks for both review-4 rewrites, copied source commands, and the 390×844 first screen: `.factory/evidence/polish-4-live/finding-checks.txt`.
+- **Links** — internal routes/fragments and both external links: `.factory/evidence/polish-4-live/link-crawl.txt`.
 - **H** — Lighthouse mobile report and summary: `.factory/evidence/polish-4-live/lighthouse.json` and `lighthouse-summary.json`.
 - **Screens** — `.factory/evidence/polish-4-live/live-home-390.png`, `live-demo-390.png`, `demo-keyboard-390.png`, and `404-390.png`.
 
@@ -61,7 +62,7 @@ All route references below are cold checks against the deployed URL.
 | F-1-41 | Kept full route-specific canonical, Open Graph, Twitter, favicon, and touch metadata. | `@claim:site-routes` (C); L. |
 | F-1-42 | Kept the same header/footer shell on legal and recovery routes. | `@claim:site-routes` (C); L. |
 | F-1-43 | Kept every visible mobile control at least 44×44 px. | mobile target test (U); L reports zero small targets. |
-| F-1-44 | Kept visible external labels and valid repository/license links. | `@claim:site-routes` (C); L. |
+| F-1-44 | Kept visible external labels and valid repository/license links. | `@claim:site-routes` (C); Links. |
 | F-1-45 | Kept privacy and limits before the final action. | U structure test; home screen. |
 | F-1-46 | Kept signed reference and Database reference terminology. | `.factory/copy-audit.md`; `@claim:reference-shape` (C). |
 | F-1-47 | Kept Demo for the route and Payload playground for the form. | `.factory/copy-audit.md`; `/demo`. |
